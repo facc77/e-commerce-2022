@@ -112,9 +112,9 @@ const ResponsiveAppBar = () => {
                 <Button sx={{ my: 1, color: "white" }}>Registro</Button>
                 <Button sx={{ my: 1, color: "white" }}>Login</Button>
                 <Button sx={{ my: 1, color: "white" }}>Lista deseos</Button>
-                {/* <Button sx={{ my: 1, color: "white" }}>
+                <Button sx={{ my: 1, color: "white" }}>
                   <ShoppingCartIcon />
-                </Button> */}
+                </Button>
               </Box>
             </Box>
           </Toolbar>
