@@ -1,7 +1,8 @@
 import React from "react";
+import Approuter from "./routes/AppRouter";
 
 function App() {
-  return <div>e-commerce</div>;
+  return <Approuter />;
 }
 
 export default App;
