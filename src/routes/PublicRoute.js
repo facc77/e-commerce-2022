@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const Publicroute = () => {
+const PublicRoute = () => {
  return (
   <>
      {/* espacio para el navbar publico */}
@@ -16,4 +16,4 @@ const Publicroute = () => {
  );
 }
 
-export default Publicroute;
+export default PublicRoute;
