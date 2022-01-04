@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import HomeScreen from '../pages/public/HomeScreen';
+import NosotroScreen from '../pages/public/NosotroScreen';
 
 const PublicRoute = () => {
  return (
@@ -7,9 +9,9 @@ const PublicRoute = () => {
      {/* espacio para el navbar publico */}
    <div>
      <Routes>
-       {/* <Route path="nosotros" element={< />} />
+       <Route path="nosotros" element={<NosotroScreen />} />
 
-       <Route path="/" element={< />} /> */}
+       <Route path="/" element={<HomeScreen />} />
      </Routes>
    </div>
  </>
