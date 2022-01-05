@@ -1,12 +1,12 @@
 import React from "react";
 import SectionBar from "../../components/SectionBar";
 
-const NosotroScreen = () => {
+const Contact = () => {
   return (
     <>
-      <SectionBar page="Nosotros" />
+      <SectionBar page="Contacto" />
     </>
   );
 };
 
-export default NosotroScreen;
+export default Contact;

@@ -1,11 +1,14 @@
-import React from 'react';
+import React from "react";
+import RegisterForm from "../../components/Forms/RegisterForm";
+import SectionBar from "../../components/SectionBar";
 
 const RegisterScreen = () => {
- return (
-  <div>
-     register screen
-  </div>
- );
-}
+  return (
+    <>
+      <SectionBar page="Registro" />
+      <RegisterForm />
+    </>
+  );
+};
 
 export default RegisterScreen;

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
@@ -26,17 +25,38 @@ const theme = createTheme({
 });
 
 const validationSchema = yup.object({
-  email: yup.string("Ingresa tu email").required("Se requiere email"),
+  name: yup
+    .string()
+    .required("Se requiere nombre")
+    .min(4, "Se requieren 4 caracteres como mínimo."),
+
+  email: yup
+    .string()
+    .email("Email invalido.")
+    .required("El email es requerido."),
   password: yup
     .string("Ingresa tu contrasena")
-    .required("Se requiere contrasena"),
+    .required("Se requiere contrasena")
+    .min(6, "Se requieren 6 caracteres como mínimo.")
+    .matches(/(?=.*[A-z])/, "Se requiere al menos una (1) letra.")
+    .matches(/(?=.*[0-9])/, "Se requiere al menos un (1) numero.")
+    .matches(
+      /^(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+      "Se requiere al menos un caracter especial."
+    ),
+  passwordConfirm: yup
+    .string()
+    .required("La contraseña es requerida.")
+    .oneOf([yup.ref("password"), null], "Las contraseñas no coinciden."),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
+      passwordConfirm: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -49,7 +69,7 @@ const LoginForm = () => {
       <Container
         component="main"
         maxWidth="xs"
-        sx={{ boxShadow: 1, borderRadius: 2, marginTop: 3 }}
+        sx={{ boxShadow: 1, borderRadius: 2, marginTop: 10 }}
       >
         <Box
           sx={{
@@ -65,7 +85,7 @@ const LoginForm = () => {
             variant="h4"
             mt={2}
           >
-            Login
+            Registro
           </Typography>
           <Typography
             fontFamily="Lato"
@@ -84,7 +104,7 @@ const LoginForm = () => {
           sx={{
             mt: 1,
             width: 400,
-            height: 290,
+            height: 420,
             padding: 0,
           }}
         >
@@ -105,6 +125,19 @@ const LoginForm = () => {
             <TextField
               sx={{ color: "#9096B2" }}
               fullWidth
+              id="name"
+              name="name"
+              label="Nombre"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
+          </Box>
+          <Box margin={4}>
+            <TextField
+              sx={{ color: "#9096B2" }}
+              fullWidth
               id="password"
               name="password"
               label="Contrasena"
@@ -113,6 +146,25 @@ const LoginForm = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+            />
+          </Box>
+          <Box margin={4}>
+            <TextField
+              sx={{ color: "#9096B2" }}
+              fullWidth
+              id="passwordConfirm"
+              name="passwordConfirm"
+              label="Repetir Contrasena"
+              type="password"
+              value={formik.values.passwordConfirm}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.passwordConfirm &&
+                Boolean(formik.errors.passwordConfirm)
+              }
+              helperText={
+                formik.touched.passwordConfirm && formik.errors.passwordConfirm
+              }
             />
           </Box>
           <ThemeProvider theme={theme}>
@@ -126,30 +178,8 @@ const LoginForm = () => {
               type="submit"
               margin="1"
             >
-              Ingresar
+              Enviar
             </Button>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Link to="/register">
-                <Button
-                  sx={{
-                    color: "#9096B2",
-
-                    margin: 1,
-                    "&:hover": {
-                      backgroundColor: "registerButton",
-                    },
-                  }}
-                  type="button"
-                >
-                  No tienes cuenta? Registrate!
-                </Button>
-              </Link>
-            </Box>
           </ThemeProvider>
         </Box>
       </Container>
@@ -157,4 +187,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

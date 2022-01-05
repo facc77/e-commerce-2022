@@ -1,7 +1,9 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
+import Badge from "@mui/material/Badge";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
@@ -10,7 +12,10 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ShoppingCartIcon, EmailIcon } from "@mui/icons-material";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 const theme = createTheme({
   palette: {
@@ -104,16 +109,31 @@ const ResponsiveAppBar = () => {
                 justifyContent: "space-around",
               }}
             >
-              <Box sx={{ my: 1, color: "white", display: "inline" }}>
-                <Button sx={{ my: 1, color: "white" }}>hekto@gmail.com</Button>
-                <Button sx={{ my: 1, color: "white" }}>11 3423 2342</Button>
+              <Box sx={{ color: "white", display: "inline" }}>
+                <Button sx={{ color: "white" }}>
+                  <MailOutlineIcon sx={{ fontSize: 20 }} />
+                  hekto@gmail.com
+                </Button>
+                <Button sx={{ color: "white" }}>
+                  <LocalPhoneOutlinedIcon sx={{ fontSize: 20 }} />
+                  11 3423 2342
+                </Button>
               </Box>
-              <Box sx={{ my: 1, color: "white", display: "inline" }}>
-                <Button sx={{ my: 1, color: "white" }}>Registro</Button>
-                <Button sx={{ my: 1, color: "white" }}>Login</Button>
-                <Button sx={{ my: 1, color: "white" }}>Lista deseos</Button>
-                <Button sx={{ my: 1, color: "white" }}>
-                  <ShoppingCartIcon />
+              <Box sx={{ color: "white", display: "inline" }}>
+                <Link to="/register">
+                  <Button sx={{ color: "white" }}>Registro</Button>
+                </Link>
+                <Link to="/login">
+                  <Button sx={{ color: "white" }}>Login</Button>
+                </Link>
+                <Button sx={{ color: "white" }}>
+                  Lista deseos
+                  <FavoriteBorderOutlinedIcon sx={{ fontSize: 20 }} />
+                </Button>
+                <Button sx={{ color: "white" }}>
+                  <Badge badgeContent={4} color="error">
+                    <ShoppingCartOutlinedIcon sx={{ fontSize: 25 }} />
+                  </Badge>
                 </Button>
               </Box>
             </Box>
