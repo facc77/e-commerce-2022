@@ -9,6 +9,7 @@ import NotFoundScreen from "../pages/public/NotFoundScreen";
 import AuthRoute from "./AuthRoute";
 import NavBar from "../components/Navbar/NavBar";
 import DownNavBar from "../components/Navbar/DownNavBar";
+import Footer from "../components/Footer";
 
 const PublicRoute = () => {
   return (
@@ -27,6 +28,7 @@ const PublicRoute = () => {
           <Route path="/contact" element={<ContactScreen />} />
         </Routes>
       </div>
+      <Footer />
     </>
   );
 };

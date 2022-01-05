@@ -7,7 +7,7 @@ const SectionBar = ({ page }) => {
     <>
       <Box
         sx={{
-          height: "286px",
+          height: "150px",
           backgroundColor: "#F6F5FF",
           display: "flex",
           alignItems: "center",

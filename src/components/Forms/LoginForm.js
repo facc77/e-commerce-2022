@@ -49,7 +49,7 @@ const LoginForm = () => {
       <Container
         component="main"
         maxWidth="xs"
-        sx={{ boxShadow: 1, borderRadius: 2, marginTop: 3 }}
+        sx={{ boxShadow: 1, borderRadius: 2, marginY: "5rem" }}
       >
         <Box
           sx={{
