@@ -119,12 +119,13 @@ const LoginForm = () => {
             <Button
               fontFamily="Lato"
               font-weight="bold"
-              font-size="17px"
+              fontSize="17px"
               color="neutral"
               variant="contained"
               fullWidth
               type="submit"
               margin="1"
+              sx={{ textTransform: "capitalize", fontSize: "17px" }}
             >
               Ingresar
             </Button>
@@ -138,7 +139,8 @@ const LoginForm = () => {
                 <Button
                   sx={{
                     color: "#9096B2",
-
+                    fontSize: "15px",
+                    textTransform: "capitalize",
                     margin: 1,
                     "&:hover": {
                       backgroundColor: "registerButton",

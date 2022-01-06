@@ -171,12 +171,13 @@ const RegisterForm = () => {
             <Button
               fontFamily="Lato"
               font-weight="bold"
-              font-size="17px"
+              font-size="27px"
               color="neutral"
               variant="contained"
               fullWidth
               type="submit"
-              margin="1"
+              margin="2"
+              sx={{ textTransform: "capitalize", fontSize: "17px" }}
             >
               Enviar
             </Button>

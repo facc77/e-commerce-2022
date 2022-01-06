@@ -135,7 +135,12 @@ const ResponsiveAppBar = () => {
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography
+                      textAlign="center"
+                      sx={{ textTransform: "capitalize" }}
+                    >
+                      {page}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -183,6 +188,7 @@ const ResponsiveAppBar = () => {
                       color: "#0D0E43",
                       fontFamily: "Lato",
                       fontSize: "16px",
+                      textTransform: "capitalize",
                     }}
                   >
                     Home
@@ -195,6 +201,7 @@ const ResponsiveAppBar = () => {
                     color: "#0D0E43",
                     fontFamily: "Lato",
                     fontSize: "16px",
+                    textTransform: "capitalize",
                   }}
                 >
                   Productos
@@ -204,6 +211,7 @@ const ResponsiveAppBar = () => {
                     color: "#0D0E43",
                     fontFamily: "Lato",
                     fontSize: "16px",
+                    textTransform: "capitalize",
                   }}
                 >
                   Compras
@@ -213,6 +221,7 @@ const ResponsiveAppBar = () => {
                     color: "#0D0E43",
                     fontFamily: "Lato",
                     fontSize: "16px",
+                    textTransform: "capitalize",
                   }}
                 >
                   Contacto
