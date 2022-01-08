@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const HomeBackoffice = () => {
- return (
-  <div>
-     home private
-  </div>
- );
-}
+  return <>admin</>;
+};
 
 export default HomeBackoffice;
