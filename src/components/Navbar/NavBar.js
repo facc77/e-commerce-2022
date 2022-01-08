@@ -120,12 +120,12 @@ const ResponsiveAppBar = () => {
                 </Button>
               </Box>
               <Box sx={{ color: "white", display: "inline" }}>
-                <Link to="/register">
+                <Link to="/auth/register" style={{textDecoration:"none"}}>
                   <Button sx={{ color: "white", textTransform: "capitalize" }}>
                     Registro
                   </Button>
                 </Link>
-                <Link to="/login">
+                <Link to="/auth/login" style={{textDecoration:"none"}}>
                   <Button sx={{ color: "white", textTransform: "capitalize" }}>
                     Login
                   </Button>
