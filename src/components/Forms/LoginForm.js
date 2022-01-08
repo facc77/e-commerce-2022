@@ -26,7 +26,7 @@ const theme = createTheme({
 });
 
 const validationSchema = yup.object({
-  email: yup.string("Ingresa tu email").required("Se requiere email"),
+  email: yup.string("Ingresa tu email").email("Email invalido").required("Se requiere email"),
   password: yup
     .string("Ingresa tu contrasena")
     .required("Se requiere contrasena"),
