@@ -9,6 +9,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "../../styles/LoginForm.css";
+import { useDispatch } from "react-redux";
+import { startLogin } from "../../redux/reducers/authReducer";
 
 const theme = createTheme({
   typography: {
@@ -26,13 +28,16 @@ const theme = createTheme({
 });
 
 const validationSchema = yup.object({
-  email: yup.string("Ingresa tu email").required("Se requiere email"),
+  email: yup.string("Ingresa tu email").email("Email invalido").required("Se requiere email"),
   password: yup
     .string("Ingresa tu contrasena")
     .required("Se requiere contrasena"),
 });
 
 const LoginForm = () => {
+  
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -40,7 +45,7 @@ const LoginForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(startLogin(values));
     },
   });
 
