@@ -16,7 +16,7 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import { Badge, Button, ButtonGroup } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {setLogout} from "../../redux/reducers/authReducer";
+import { setLogout } from "../../redux/reducers/authReducer";
 const settings = ["Backoffice", "Logout"];
 const NavBar = () => {
   const { logged, user } = useSelector((state) => state.auth);
@@ -31,11 +31,11 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  const handleClick = (e) =>{
-      if("Logout"){
-         dispatch(setLogout());
-      }
-  }
+  const handleClick = (e) => {
+    if ("Logout") {
+      dispatch(setLogout());
+    }
+  };
 
   return (
     <AppBar position="static">
@@ -120,23 +120,31 @@ const NavBar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={(e)=>handleClick(e)}>
+                  <MenuItem key={setting} onClick={(e) => handleClick(e)}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
           ) : (
-            <ButtonGroup  variant="text">
-              <Link to="/auth/login" style={{textDecoration:"none", color:"white"}}>
-                <Button color="inherit">Login</Button>
-              </Link> 
-              <Button
-                color="inherit"
-                sx={{ ml: 3, display: { xs: "none", md: "flex" } }}
+            <ButtonGroup variant="text">
+              <Link
+                to="/auth/login"
+                style={{ textDecoration: "none", color: "white" }}
               >
-                Register
-              </Button>
+                <Button color="inherit">Login</Button>
+              </Link>
+              <Link
+                to="/auth/register"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                <Button
+                  color="inherit"
+                  sx={{ ml: 3, display: { xs: "none", md: "flex" } }}
+                >
+                  Register
+                </Button>
+              </Link>
             </ButtonGroup>
           )}
         </Toolbar>
