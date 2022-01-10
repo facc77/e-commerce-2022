@@ -173,58 +173,28 @@ const ResponsiveAppBar = () => {
                 >
                   Hekto
                 </Typography>
-                <MenuItem
-                  component={Link}
-                  to={"/"}
-                  sx={{
-                    mt: "0.5rem",
-                    height: "40px",
-                    padding: "0px",
-                  }}
-                >
-                  <Button
+                {pages.map((page) => (
+                  <MenuItem
+                    component={Link}
+                    to={page === "home" ? "/" : `${page}`}
                     sx={{
-                      color: "#0D0E43",
-                      fontFamily: "Lato",
-                      fontSize: "16px",
-                      textTransform: "capitalize",
+                      mt: "0.5rem",
+                      height: "40px",
+                      padding: "0px",
                     }}
                   >
-                    Home
-                  </Button>
-                </MenuItem>
-                {/*                 <Link to="/"></Link>
-                 */}{" "}
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Productos
-                </Button>
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Compras
-                </Button>
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Contacto
-                </Button>
+                    <Button
+                      sx={{
+                        color: "#0D0E43",
+                        fontFamily: "Lato",
+                        fontSize: "16px",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {page}
+                    </Button>
+                  </MenuItem>
+                ))}
               </Box>
               <Box
                 sx={{
