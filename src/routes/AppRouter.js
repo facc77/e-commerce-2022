@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { getCategorias } from '../redux/reducers/categorieReducer';
+import { getUsuarios } from '../redux/reducers/userReducer';
 import Privateroute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
@@ -10,7 +11,8 @@ const Approuter = () => {
    const dispatch = useDispatch();
 
       useEffect(() => {
-        dispatch(getCategorias()); 
+        dispatch(getCategorias());
+        dispatch(getUsuarios()); 
       }, [dispatch]);
 
 
