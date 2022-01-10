@@ -1,6 +1,7 @@
 import {configureStore} from "@reduxjs/toolkit";
 import authReducer from "./reducers/authReducer";
 import categorieReducer from "./reducers/categorieReducer";
+import userReducer from "./reducers/userReducer";
 
 //reducers
 
@@ -8,7 +9,8 @@ import categorieReducer from "./reducers/categorieReducer";
 export default configureStore({
   reducer: {
    auth: authReducer,
-   categories:categorieReducer
+   categories:categorieReducer,
+   users:userReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
 });
