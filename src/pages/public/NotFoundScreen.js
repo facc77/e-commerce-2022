@@ -17,22 +17,23 @@ const NotFoundScreen = () => {
           }}
         >
           <Image src={NotFound} />
-          <Button
-            sx={{
-              marginLeft: "11rem",
-              color: "#fff",
-              textTransform: "lowercase",
-              backgroundColor: "#FB2E86",
-              fontFamily: "Lato",
-              fontSize: "16px",
-              "&:hover": {
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              sx={{
+                color: "#fff",
+                textTransform: "lowercase",
                 backgroundColor: "#FB2E86",
-              },
-            }}
-            type="button"
-          >
-            Regresar a Home
-          </Button>
+                fontFamily: "Lato",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#FB2E86",
+                },
+              }}
+              type="button"
+            >
+              Regresar a Home
+            </Button>
+          </Box>
         </Box>
       </Box>
     </>
