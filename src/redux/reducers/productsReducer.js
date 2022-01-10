@@ -1,30 +1,65 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import {
+  getProducts,
+  postProducts,
+  putProducts,
+} from "../../services/product.service";
 
-export const getProducts = createAsyncThunk("products/getPosts", async () => {
-  return fetch(
-    "https://backend-e-commerce-2022.herokuapp.com/api/products"
-  ).then((res) => res.json());
-});
+export const getProductos = createAsyncThunk(
+  "productos/getProductos",
+  async () => {
+    return await getProducts();
+  }
+);
+
+export const postProductos = createAsyncThunk(
+  "productos/postProductos",
+  async (body) => {
+    const { name, category, price, description, img } = body;
+    const resp = await postProducts({
+      name,
+      category,
+      price,
+      description,
+      img,
+    });
+    return resp;
+  }
+);
+
+export const putProductos = createAsyncThunk(
+  "productos/putProductos",
+  async (body) => {
+    const { name, category, price, description, img } = body;
+    const resp = await putProducts({
+      name,
+      category,
+      price,
+      description,
+      img,
+    });
+    return resp;
+  }
+);
 
 const productsSlice = createSlice({
   name: "products",
   initialState: {
-    products: [],
-    loading: "false",
+    productsList: [],
+    loading: false,
     error: null,
   },
   extraReducers: {
-    [getProducts.pending]: (state, action) => {
+    [getProductos.pending]: (state, action) => {
       state.loading = true;
     },
-    [getProducts.fulfilled]: (state, { payload }) => {
-      state.products = payload;
-      state.loading = "false";
+    [getProductos.fulfilled]: (state, action) => {
+      state.productsList = action.payload.resp.data;
+      state.loading = false;
     },
-    [getProducts.rejected]: (state, action) => {
-      state.loading = "errorrrr";
-      state.error = "ocurrió un error";
+    [getProductos.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });

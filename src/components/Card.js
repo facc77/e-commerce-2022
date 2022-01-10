@@ -4,15 +4,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Image from "material-ui-image";
 
-export default function MediaCard({
-  name,
-  image,
-  precioTotal,
-  precioDescuento,
-}) {
+export default function MediaCard({ name, image, price }) {
   return (
     <Card sx={{ width: 300, m: "3rem" }}>
-      <Image sx={{ height: "200px", width: "300px" }} src={image} />
+      <Image sx={{ height: "200px", width: "300px" }} src={image} alt="image" />
       <CardContent>
         <Typography
           gutterBottom
@@ -34,24 +29,11 @@ export default function MediaCard({
             display: "inline",
             fontSize: "17px",
             fontFamily: "Josefin Sans",
-            textDecoration: "line-through",
             marginLeft: "1rem",
             float: "right",
           }}
         >
-          ${precioTotal}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="#151875"
-          sx={{
-            display: "inline",
-            fontSize: "17px",
-            fontFamily: "Josefin Sans",
-            float: "right",
-          }}
-        >
-          ${precioTotal}
+          ${price}
         </Typography>
       </CardContent>
     </Card>
