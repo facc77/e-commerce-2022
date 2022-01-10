@@ -76,13 +76,7 @@ const theme = createTheme({
   },
 });
 
-const pages = [
-  "hekto@gmail.com",
-  "11 3423 2342",
-  "Registro",
-  "Login",
-  "Lista deseos",
-];
+const pages = ["home", "productos", "compras", "contacto"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -102,7 +96,7 @@ const ResponsiveAppBar = () => {
           <Toolbar disableGutters>
             <Box
               sx={{
-                flexGrow: 1,
+                flexGrow: { xs: 0, sm: 0, md: 1 },
                 display: { xs: "flex", md: "none" },
               }}
             >
@@ -134,7 +128,12 @@ const ResponsiveAppBar = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem
+                    component={Link}
+                    to={page === "home" ? "/" : `${page}`}
+                    key={page}
+                    onClick={handleCloseNavMenu}
+                  >
                     <Typography
                       textAlign="center"
                       sx={{ textTransform: "capitalize" }}
@@ -145,23 +144,23 @@ const ResponsiveAppBar = () => {
                 ))}
               </Menu>
             </Box>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-            >
-              LOGO
-            </Typography>
+
             <Box
               sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex" },
+                flexGrow: { xs: 0, sm: 0, md: 1 },
+                display: { md: "flex" },
                 justifyContent: "space-around",
                 color: "#0D0E43",
               }}
             >
-              <Box sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  display: {
+                    xs: "none",
+                    md: "flex",
+                  },
+                }}
+              >
                 <Typography
                   variant="h6"
                   noWrap
@@ -227,7 +226,13 @@ const ResponsiveAppBar = () => {
                   Contacto
                 </Button>
               </Box>
-              <Box sx={{ color: "#0D0E43", display: "flex" }}>
+              <Box
+                sx={{
+                  color: "#0D0E43",
+                  display: "flex",
+                  margin: { xs: "0" },
+                }}
+              >
                 <Search>
                   <SearchIconWrapper>
                     <SearchIcon

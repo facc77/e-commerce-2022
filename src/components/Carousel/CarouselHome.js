@@ -1,24 +1,25 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Paper, Button, Box, Typography } from "@mui/material";
-import Image from "../../img/NotFound.png";
+import { Paper, Box, Typography } from "@mui/material";
+import Image from "./xbox.jpg";
+import Image2 from "./play.jpg";
 
 function CarouselHome(props) {
   var items = [
     {
-      name: "Titulo nro #1",
-      description: "Aprovecha la promo!",
+      name: "Lo último en consolas",
+      description: "Aprovecha descuentos!",
       image: Image,
     },
     {
-      name: "Titulo nro #2",
-      description: "No te lo podes perder!",
-      image: Image,
+      name: "Playstation 5",
+      description: "Llegó el último modelo!",
+      image: Image2,
     },
   ];
 
   return (
-    <Carousel sx={{ height: "450px" }}>
+    <Carousel sx={{ height: { xs: "240px", md: "450px" } }}>
       {items.map((item, i) => (
         <Item key={i} item={item} />
       ))}
@@ -30,20 +31,25 @@ function Item(props) {
   return (
     <Paper
       sx={{
-        height: "450px",
+        height: { xs: "240px", md: "450px" },
         backgroundImage: `url(${props.item.image})`,
         backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
         backgroundSize: "cover",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-end",
       }}
     >
-      <Box sx={{ marginBottom: "4rem" }}>
+      <Box
+        sx={{
+          marginBottom: { xs: "1rem", md: "4rem" },
+          textAlign: "center",
+        }}
+      >
         <Typography
           sx={{
-            display: "inline",
-            fontSize: "34px",
+            fontSize: { xs: "25px", md: "34px" },
             fontFamily: "Josefin Sans",
           }}
         >
@@ -51,7 +57,7 @@ function Item(props) {
         </Typography>
         <Typography
           sx={{
-            fontSize: "17px",
+            fontSize: { xs: "14px", md: "17px" },
             fontFamily: "Lato",
           }}
         >

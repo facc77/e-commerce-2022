@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getProducts } from "../redux/reducers/productsReducer";
 import { Box, Typography } from "@mui/material";
 import Image from "../img/NotFound.png";
 
 import ProductCard from "./Card";
 
 const CardContainer = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
   var products = [
     {
       name: "Titulo nro #1",
