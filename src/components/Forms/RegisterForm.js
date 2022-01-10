@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
@@ -7,6 +8,7 @@ import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {startRegister} from "../../redux/reducers/authReducer";
 import "../../styles/LoginForm.css";
 
 const theme = createTheme({
@@ -51,6 +53,7 @@ const validationSchema = yup.object({
 });
 
 const RegisterForm = () => {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -60,7 +63,8 @@ const RegisterForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const  {passwordConfirm, ...rest} = values;
+      dispatch(startRegister(rest));
     },
   });
 
