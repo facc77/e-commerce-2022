@@ -1,7 +1,11 @@
-import React from "react";
+import React from 'react';
 
-const HomeBackoffice = () => {
-  return <>admin</>;
-};
+const Homebackoffice = () => {
+  return (
+    <div>
+      
+    </div>
+  );
+}
 
-export default HomeBackoffice;
+export default Homebackoffice;
