@@ -61,6 +61,41 @@ const productsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
+    //post-----------------------------------------
+    [postProductos.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [postProductos.fulfilled]: (state, action) => {
+      action.payload.error
+        ? (state.error = action.payload.error)
+        : (state.productsList = [
+            ...state.productsList,
+            action.payload.resp.category,
+          ]);
+      state.loading = false;
+    },
+    [postProductos.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+
+    //put-----------------------------------------
+    [putProductos.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [putProductos.fulfilled]: (state, action) => {
+      state.productsList = state.productsList.map((product) =>
+        product.uid === action.payload.resp.product.uid
+          ? action.payload.resp.product
+          : product
+      );
+      state.loading = false;
+    },
+    [putProductos.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 

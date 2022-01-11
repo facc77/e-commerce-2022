@@ -8,7 +8,7 @@ export default function MediaCard({ name, image, price }) {
   return (
     <Card sx={{ width: 300, m: "3rem" }}>
       <Image sx={{ height: "200px", width: "300px" }} src={image} alt="image" />
-      <CardContent>
+      <CardContent sx={{ textAlign: "center" }}>
         <Typography
           gutterBottom
           variant="h5"
@@ -33,7 +33,7 @@ export default function MediaCard({ name, image, price }) {
             float: "right",
           }}
         >
-          ${price}
+          {price ? `$${price}` : ""}
         </Typography>
       </CardContent>
     </Card>

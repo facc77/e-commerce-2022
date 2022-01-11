@@ -57,7 +57,7 @@ const Footer = () => {
               item
               xs={6}
               sx={{
-                padding: { xs: "2rem", md: "3rem" },
+                padding: { xs: "2rem", md: "3.5rem" },
                 flexBasis: { xs: "100%", md: "50%" },
                 maxWidth: { xs: "100%", md: "50%" },
               }}

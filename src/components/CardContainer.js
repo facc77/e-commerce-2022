@@ -1,8 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
-import Image from "../img/NotFound.png";
-
 import ProductCard from "./Card";
 
 const CardContainer = () => {
