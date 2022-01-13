@@ -1,60 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getProducts } from "../redux/reducers/productsReducer";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
-import Image from "../img/NotFound.png";
-
 import ProductCard from "./Card";
+import { Link } from "react-router-dom";
+import MenuItem from "@mui/material/MenuItem";
+import { useDispatch } from "react-redux";
+import setActiveProduct from "../redux/reducers/productsReducer";
 
 const CardContainer = () => {
+  const { productsList } = useSelector((state) => state.products);
+  let lastElements = productsList.slice(-3);
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
-  var products = [
-    {
-      name: "Titulo nro #1",
-      description: "Aprovecha la promo!",
-      image: Image,
-      precioTotal: "2131",
-      precioDescuento: "233",
-    },
-    {
-      name: "Titulo nro #2",
-      description: "No te lo podes perder!",
-      image: Image,
-      precioTotal: "2342",
-      precioDescuento: "655",
-    },
-    {
-      name: "Titulo nro #3",
-      description: "No te lo podes perder!",
-      image: Image,
-      precioTotal: "3040",
-      precioDescuento: "456",
-    },
-    {
-      name: "Titulo nro #4",
-      description: "No te lo podes perder!",
-      image: Image,
-      precioTotal: "300",
-      precioDescuento: "200",
-    },
-    {
-      name: "Titulo nro #5",
-      description: "No te lo podes perder!",
-      image: Image,
-      precioTotal: "300",
-      precioDescuento: "20450",
-    },
-    {
-      name: "Titulo nro #6",
-      description: "No te lo podes perder!",
-      image: Image,
-      precioTotal: "36600",
-      precioDescuento: "20660",
-    },
-  ];
+  const callDispatch = (name) => {
+    dispatch(setActiveProduct(name));
+  };
+
   return (
     <>
       <Box
@@ -78,14 +39,21 @@ const CardContainer = () => {
           flexWrap: "wrap",
         }}
       >
-        {products.map((product, id) => (
-          <ProductCard
+        {lastElements.map((product, id) => (
+          <MenuItem
             key={id}
-            name={product.name}
-            image={product.image}
-            precioTotal={product.precioTotal}
-            precioDescuento={product.precioDescuento}
-          />
+            component={Link}
+            to="/detalleProducto"
+            onClick={() => callDispatch(product.name)}
+          >
+            <ProductCard
+              key={id}
+              name={product.name}
+              image={product.img || null}
+              price={product.price}
+              showIcons={true}
+            />
+          </MenuItem>
         ))}
       </Box>
     </>

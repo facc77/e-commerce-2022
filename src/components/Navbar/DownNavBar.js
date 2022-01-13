@@ -14,6 +14,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import { useDispatch } from "react-redux";
+import { setEditCate } from "../../redux/reducers/categorieReducer";
 
 const Search = styled("div")(({ theme }) => ({
   display: "flex",
@@ -77,9 +79,23 @@ const theme = createTheme({
 });
 
 const pages = ["home", "productos", "compras", "contacto"];
+const categories = [
+  "Televisores",
+  "Laptops y Computadoras",
+  "Camaras y Fotografía",
+  "Smartphones & Tablets",
+  "Consolas y Videojuegos",
+];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const dispatch = useDispatch();
+  const callDispatch = (name) => {
+    console.log(name);
+    dispatch(setEditCate(name));
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -87,6 +103,14 @@ const ResponsiveAppBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
@@ -142,6 +166,54 @@ const ResponsiveAppBar = () => {
                     </Typography>
                   </MenuItem>
                 ))}
+                <MenuItem>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <IconButton
+                      onClick={handleOpenUserMenu}
+                      sx={{ p: "0.5rem", mt: "0.5rem", borderRadius: "0px" }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#0D0E43",
+                          fontFamily: "Lato",
+                          fontSize: "16px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        categorias
+                      </Typography>
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      {categories.map((categorie) => (
+                        <MenuItem
+                          component={Link}
+                          to={"/productos"}
+                          key={categorie} /* onClick={handleCloseNavMenu} */
+                          onClick={() => callDispatch(categorie.toUpperCase())}
+                        >
+                          <Typography textAlign="center">
+                            {categorie}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                </MenuItem>
               </Menu>
             </Box>
 
@@ -173,58 +245,77 @@ const ResponsiveAppBar = () => {
                 >
                   Hekto
                 </Typography>
-                <MenuItem
-                  component={Link}
-                  to={"/"}
-                  sx={{
-                    mt: "0.5rem",
-                    height: "40px",
-                    padding: "0px",
-                  }}
-                >
-                  <Button
+
+                {pages.map((page) => (
+                  <MenuItem
+                    key={page}
+                    component={Link}
+                    to={page === "home" ? "/" : `${page}`}
                     sx={{
-                      color: "#0D0E43",
-                      fontFamily: "Lato",
-                      fontSize: "16px",
-                      textTransform: "capitalize",
+                      mt: "0.5rem",
+                      height: "40px",
+                      padding: "0px",
                     }}
                   >
-                    Home
-                  </Button>
-                </MenuItem>
-                {/*                 <Link to="/"></Link>
-                 */}{" "}
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Productos
-                </Button>
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Compras
-                </Button>
-                <Button
-                  sx={{
-                    color: "#0D0E43",
-                    fontFamily: "Lato",
-                    fontSize: "16px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Contacto
-                </Button>
+                    <Button
+                      sx={{
+                        color: "#0D0E43",
+                        fontFamily: "Lato",
+                        fontSize: "16px",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {page}
+                    </Button>
+                  </MenuItem>
+                ))}
+                <Box sx={{ flexGrow: 0 }}>
+                  <IconButton
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: "0.5rem", mt: "0.5rem", borderRadius: "0px" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#0D0E43",
+                        fontFamily: "Lato",
+                        fontSize: "16px",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      categorias
+                    </Typography>
+                  </IconButton>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {categories.map((categorie) => (
+                      <MenuItem
+                        component={Link}
+                        to={"/productos"}
+                        key={categorie}
+                        /* onClick={handleCloseNavMenu} */
+                        onClick={() =>
+                          callDispatch(categorie.name.toUpperCase())
+                        }
+                      >
+                        <Typography textAlign="center">{categorie}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
               </Box>
               <Box
                 sx={{

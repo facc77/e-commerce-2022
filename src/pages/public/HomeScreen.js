@@ -2,6 +2,7 @@ import React from "react";
 import CarouselHome from "../../components/Carousel/CarouselHome";
 import CardContainer from "../../components/CardContainer";
 import ServicesContainer from "../../components/ServicesContainer";
+import CatContainer from "../../components/CatContainer";
 
 const HomeScreen = () => {
   return (
@@ -9,6 +10,7 @@ const HomeScreen = () => {
       <CarouselHome />
       <CardContainer />
       <ServicesContainer />
+      <CatContainer />
     </>
   );
 };

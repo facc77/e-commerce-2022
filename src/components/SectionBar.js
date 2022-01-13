@@ -13,7 +13,7 @@ const SectionBar = ({ page }) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ marginLeft: "13rem" }}>
+        <Box sx={{ marginLeft: { xs: "2rem", md: "13rem" } }}>
           <Typography
             fontFamily="Josefin Sans"
             component="h1"
