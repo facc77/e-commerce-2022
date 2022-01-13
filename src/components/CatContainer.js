@@ -2,8 +2,18 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "./Card";
+import { Link } from "react-router-dom";
+import MenuItem from "@mui/material/MenuItem";
+import { useDispatch } from "react-redux";
+import { setEditCate } from "../redux/reducers/categorieReducer";
 
 const CatContainer = () => {
+  const dispatch = useDispatch();
+  const callDispatch = (name) => {
+    console.log(name);
+    dispatch(setEditCate(name));
+  };
+
   const categories = [
     {
       name: "Laptops y Computadoras",
@@ -18,12 +28,12 @@ const CatContainer = () => {
       img: "https://www.sony.es/image/5d5c8d0485d37c1b150022bd9819bb1d?fmt=pjpeg&wid=660&bgcolor=F1F5F9&bgc=F1F5F9",
     },
     {
-      name: "Videojuegos y Consolas",
+      name: "Consolas y Videojuegos",
       img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd_vlyqWIiNybGiRge0Udw4ksfkeyo-dyfQg&usqp=CAU",
     },
     {
-      name: "Audio & Sonido",
-      img: "https://www.softzone.es/app/uploads-softzone.es/2020/09/Audio-Denoise-1-800x419.jpg",
+      name: "Televisores",
+      img: "https://static.eldiario.es/clip/b0558d74-f9e6-4f17-8c99-0a794176213f_16-9-discover-aspect-ratio_default_0.jpg",
     },
   ];
 
@@ -51,12 +61,20 @@ const CatContainer = () => {
         }}
       >
         {categories.map((categorie, id) => (
-          <Card
+          <MenuItem
             key={id}
-            name={categorie.name}
-            image={categorie.img || null}
-            price={null}
-          />
+            component={Link}
+            to="/productos"
+            onClick={() => callDispatch(categorie.name.toUpperCase())}
+          >
+            <Card
+              key={id}
+              name={categorie.name}
+              image={categorie.img || null}
+              price={null}
+              showIcons={false}
+            />
+          </MenuItem>
         ))}
       </Box>
     </>

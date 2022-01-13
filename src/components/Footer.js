@@ -75,7 +75,11 @@ const Footer = () => {
                 </ListItem>
 
                 {categories.map((categorie) => (
-                  <ListItem disablePadding sx={{ justifyContent: "center" }}>
+                  <ListItem
+                    key={categorie}
+                    disablePadding
+                    sx={{ justifyContent: "center" }}
+                  >
                     <MenuItem component={Link} to="/login" sx={{ padding: 0 }}>
                       <Button
                         sx={{ color: "#8A8FB9", textTransform: "capitalize" }}

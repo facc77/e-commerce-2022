@@ -6,6 +6,7 @@ import ContactScreen from "../pages/public/ContactScreen";
 import NotFoundScreen from "../pages/public/NotFoundScreen";
 import CartScreen from "../pages/public/CartScreen";
 import ProductsScreen from "../pages/public/ProductsScreen";
+import ProductDetailScreen from "../pages/public/ProductDetailScreen";
 import AuthRoute from "./AuthRoute";
 import NavBar from "../components/Navbar/NavBar";
 import DownNavBar from "../components/Navbar/DownNavBar";
@@ -26,6 +27,7 @@ const PublicRoute = () => {
           <Route path="/contacto" element={<ContactScreen />} />
           <Route path="/cart" element={<CartScreen />} />
           <Route path="/productos" element={<ProductsScreen />} />
+          <Route path="detalleProducto" element={<ProductDetailScreen />} />
         </Routes>
       </div>
       <Footer />
