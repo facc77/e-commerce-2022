@@ -1,21 +1,29 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
-import Box from "@mui/material/Box";
+import {  Route, Routes } from "react-router-dom";
 import HomeBackoffice from "../pages/backoffice/HomeBackoffice";
 import UsersBackoffice from "../pages/backoffice/UsersBackoffice";
-import Privatenavbar from "../components/Navbar/PrivateNavBar";
+import CategoriesBackoffice from "../pages/backoffice/CategoriesBackoffice";
+import ProductsBackoffice from "../pages/backoffice/ProductsBackoffice";
+import NavbarPrivate from "../components/Navbar/private navbar/NavbarPrivate";
+
+
+
 
 const Privateroute = () => {
+  
+
   return (
-    <>
-      <Privatenavbar />
-      <Box marginLeft="250px">
+
+    <div>
+      <NavbarPrivate />
         <Routes>
+          <Route path="/categories" element={<CategoriesBackoffice />} />
+          <Route path="/products" element={<ProductsBackoffice />} />
           <Route path="/users" element={<UsersBackoffice />} />
           <Route path="/" element={<HomeBackoffice />} />
         </Routes>
-      </Box>
-    </>
+    </div>
+
   );
 };
 
