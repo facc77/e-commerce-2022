@@ -17,7 +17,6 @@ import SideBar from './sideBar';
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavbarPrivate = () => {
- const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
 
@@ -26,7 +25,7 @@ const NavbarPrivate = () => {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    
   };
 
   const handleCloseUserMenu = () => {
