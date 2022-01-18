@@ -21,7 +21,7 @@ export const getProductosPorCategoria = createAsyncThunk(
       let products = [];
       for (let i = 0; i < categoriesList.resp.data.length; i++) {
         const productsData = await getProductsByCategory(categoriesList.resp.data[i].uid);
-        products = [{[categoriesList.resp.data[i].name]:productsData.resp.results}, ...products];
+        products = [{name:categoriesList.resp.data[i].name, data:productsData.resp.results}, ...products];
       }
       return products;
     }  
