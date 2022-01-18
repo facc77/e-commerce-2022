@@ -44,3 +44,14 @@ export const deleteProducts = async (id) => {
   }
   return datos;
 };
+
+
+export const getProductsByCategory = async (idCat) => {
+  const resp = await fetchPublic(`/search/categories/${idCat}`);
+  if (resp.ok) {
+    datos.resp = await resp.json();
+  } else {
+    datos.error = resp.statusText;
+  }
+  return datos;
+};
