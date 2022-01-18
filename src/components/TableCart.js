@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from "react-redux";
 import image1 from "../img/support1.png";
 import image2 from "../img/support2.png";
 import image3 from "../img/support3.png";
@@ -47,6 +48,8 @@ export default function BasicTable() {
     alert(product);
   };
 
+  const cartProdutcs = useSelector((state) => state.products.cart);
+
   return (
     <TableContainer sx={{ border: 0, boxShadow: "none" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -56,25 +59,25 @@ export default function BasicTable() {
             <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Precio
             </TableCell>
-            <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
+            {/* <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Cantidad
             </TableCell>
             <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Total
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {cartProdutcs.map((product) => (
             <TableRow
-              key={row.producto}
+              key={product.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
                 <Box sx={{ height: "80px", width: "80px" }}>
-                  <Image src={row.image} />
+                  <Image src={product.img} />
                   <DeleteIcon
-                    onClick={() => handleClick(row)}
+                    onClick={() => handleClick(product)}
                     sx={{
                       position: "relative",
                       bottom: " 5rem",
@@ -90,28 +93,29 @@ export default function BasicTable() {
                     display: "inline",
                   }}
                 >
-                  {row.name}
+                  {product.name}
                 </Typography>
               </TableCell>
               <TableCell
                 align="right"
                 sx={{ fontFamily: "Josefin Sans", fontSize: "14px" }}
               >
-                ${row.precio}
+                ${product.price}
               </TableCell>
-              <TableCell align="right">
+              {/* <TableCell align="right">
                 <Button sx={{ padding: "0rem" }}>+</Button>
                 {row.cantidad}
                 <Button padding="0rem" sx={{ padding: "0.5rem" }}>
                   -
                 </Button>
-              </TableCell>
+              </TableCell> 
               <TableCell
                 align="right"
                 sx={{ fontFamily: "Josefin Sans", fontSize: "14px" }}
               >
                 ${row.precio * row.cantidad}
-              </TableCell>
+              </TableCell>{" "}
+              */}
             </TableRow>
           ))}
         </TableBody>

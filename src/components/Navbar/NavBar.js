@@ -1,6 +1,8 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Image from "material-ui-image";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -20,6 +22,7 @@ import { setLogout } from "../../redux/reducers/authReducer";
 const settings = ["Backoffice", "Logout"];
 const NavBar = () => {
   const { logged, user } = useSelector((state) => state.auth);
+  const ProductsCart = useSelector((state) => state.products.cart);
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,6 +38,10 @@ const NavBar = () => {
     if ("Logout") {
       dispatch(setLogout());
     }
+  };
+
+  const handleCartMenu = () => {
+    console.log("menu click");
   };
 
   return (
@@ -75,7 +82,7 @@ const NavBar = () => {
             {}
           </Box>
 
-          <Box mr={2} sx={{ flexGrow: 0 }}>
+          {/* <Box mr={2} sx={{ flexGrow: 0 }}>
             <IconButton
               size="large"
               aria-label="show 4 new favorites"
@@ -90,10 +97,84 @@ const NavBar = () => {
               aria-label="show 17 new shops"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={ProductsCart.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
+          </Box> */}
+          <Box mr={2} sx={{ flexGrow: 0 }}>
+            <Tooltip title="Abrir Carrito">
+              <IconButton
+                size="large"
+                onClick={handleOpenUserMenu}
+                color="inherit"
+                sx={{ p: 0 }}
+              >
+                <Badge badgeContent={ProductsCart.length} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {ProductsCart.map((product) => (
+                <MenuItem key={product} onClick={handleCartMenu}>
+                  <Grid container>
+                    <Grid item sx={{ heigth: "65px", width: "65px" }}>
+                      <Image
+                        imageStyle={{
+                          height: "100%",
+                          width: "100%",
+                        }}
+                        src={product.img}
+                        alt="image"
+                      />
+                    </Grid>
+                    <Grid>
+                      <Typography
+                        sx={{ fontFamily: "Lato", textTransform: "capitalize" }}
+                      >
+                        {product.name}
+                      </Typography>
+                      <Typography
+                        color="#FB2448"
+                        sx={{
+                          fontFamily: "Lato",
+                          textTransform: "capitalize",
+                          float: "right",
+                          fontSize: "14px",
+                        }}
+                      >
+                        ${product.price}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </MenuItem>
+              ))}
+              <MenuItem component={Link} to="/carrito">
+                <Typography
+                  sx={{
+                    fontFamily: "Lato",
+                  }}
+                >
+                  Ver todo el carrito
+                </Typography>
+              </MenuItem>
+            </Menu>
           </Box>
 
           {logged ? (

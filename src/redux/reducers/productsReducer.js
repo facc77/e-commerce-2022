@@ -46,14 +46,22 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     productsList: [],
+    cart: [],
     loading: false,
     active: null,
     error: null,
   },
   reducers: {
     setActiveProduct(state, action) {
+      console.log(state, action);
       action.payload ? (state.active = action.payload) : (state.active = null);
     },
+    setAddProduct(state, action) {
+      state.cart = [...state.cart, action.payload];
+    },
+    /* setDeleteProduct(state, action) {
+      action.payload ? (state.active = action.payload) : (state.active = null);
+    }, */
   },
   extraReducers: {
     [getProductos.pending]: (state, action) => {
@@ -104,6 +112,6 @@ const productsSlice = createSlice({
     },
   },
 });
-export const { setActiveProduct } = productsSlice.actions;
+export const { setActiveProduct, setAddProduct } = productsSlice.actions;
 
 export default productsSlice.reducer;

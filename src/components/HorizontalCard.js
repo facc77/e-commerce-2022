@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setAddProduct } from "../redux/reducers/productsReducer";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Image from "material-ui-image";
@@ -6,8 +8,12 @@ import Typography from "@mui/material/Typography";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-const HorizontalCard = ({ image, name, price, description }) => {
-  console.log(image, name, price, description);
+const HorizontalCard = ({ product }) => {
+  const dispatch = useDispatch();
+  const callDispatch = (product) => {
+    console.log(product);
+    dispatch(setAddProduct(product));
+  };
   return (
     <>
       <Box
@@ -28,7 +34,7 @@ const HorizontalCard = ({ image, name, price, description }) => {
                 width: "350px",
                 paddingTop: { xs: "2rem" },
               }}
-              src={image}
+              src={product.img}
               alt="image"
             />
           </Grid>
@@ -43,7 +49,7 @@ const HorizontalCard = ({ image, name, price, description }) => {
                 color: "#111C85",
               }}
             >
-              {name}
+              {product.name}
             </Typography>
             <Typography
               variant="h5"
@@ -54,7 +60,7 @@ const HorizontalCard = ({ image, name, price, description }) => {
                 color: "#111C85",
               }}
             >
-              ${price}
+              ${product.price}
             </Typography>
             <Typography
               m={1}
@@ -66,7 +72,7 @@ const HorizontalCard = ({ image, name, price, description }) => {
                 display: { xs: "none", md: "block" },
               }}
             >
-              {description}
+              {product.description}
             </Typography>
             <Box>
               <ShoppingCartOutlinedIcon
@@ -79,6 +85,7 @@ const HorizontalCard = ({ image, name, price, description }) => {
                     cursor: "pointer",
                   },
                 }}
+                onClick={() => callDispatch(product)}
               />
               <FavoriteBorderOutlinedIcon
                 sx={{

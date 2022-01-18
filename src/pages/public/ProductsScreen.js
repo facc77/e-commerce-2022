@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../../components/Card";
 import SectionBar from "../../components/SectionBar";
 import HorizontalCard from "../../components/HorizontalCard";
@@ -15,21 +15,32 @@ import Select from "@mui/material/Select";
 
 const ProductsScreen = () => {
   const activeCategory = useSelector((state) => state.categories.active);
-  const products = useSelector((state) => state.products.productsList);
-  const categoryProducts = products.filter(
-    (product) => product.category.name === activeCategory
-  );
-  console.log(categoryProducts);
 
-  const [view, setView] = useState("list");
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    MoreToLess();
+  }, [activeCategory]);
+
+  const [view, setView] = useState("grid");
+  const [productOrder, setProductOrder] = useState("menor precio");
+
+  const products = useSelector((state) => state.products.productsList);
+  const categoryProducts = products
+    .filter((product) => product.category.name === activeCategory)
+    .sort((a, b) => a.price - b.price);
+
   const [productList, setProductList] = useState(categoryProducts);
 
   const lessToMore = () => {
+    console.log(productList);
+    setProductOrder("mayor precio");
     setProductList(categoryProducts.sort((a, b) => b.price - a.price));
   };
 
   const MoreToLess = () => {
+    setProductOrder("menor precio");
     setProductList(categoryProducts.sort((a, b) => a.price - b.price));
+    console.log(productList);
   };
 
   return (
@@ -80,6 +91,7 @@ const ProductsScreen = () => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Precio"
+                  value={productOrder}
                 >
                   <MenuItem
                     onClick={() => MoreToLess()}
@@ -144,6 +156,7 @@ const ProductsScreen = () => {
         {view === "grid"
           ? productList.map((product) => (
               <Card
+                key={product._id}
                 image={product.img}
                 name={product.name}
                 price={product.price}
@@ -153,10 +166,12 @@ const ProductsScreen = () => {
             ))
           : productList.map((product) => (
               <HorizontalCard
-                image={product.img}
+                key={product._id}
+                /* image={product.img}
                 name={product.name}
                 price={product.price}
-                description={product.description}
+                description={product.description} */
+                product={product}
               />
             ))}
         {}
