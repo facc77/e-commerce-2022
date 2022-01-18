@@ -25,7 +25,7 @@ const PublicRoute = () => {
 
           <Route path="/" element={<HomeScreen />} />
           <Route path="/contacto" element={<ContactScreen />} />
-          <Route path="/cart" element={<CartScreen />} />
+          <Route path="/carrito" element={<CartScreen />} />
           <Route path="/productos" element={<ProductsScreen />} />
           <Route path="detalleProducto" element={<ProductDetailScreen />} />
         </Routes>
