@@ -16,11 +16,11 @@ const CatContainer = () => {
 
   const categories = [
     {
-      name: "Laptops y Computadoras",
+      name: "Laptops & Computadoras",
       img: "https://larepublica.pe/resizer/lKrOK6jeK-JEGf0VnylNtbGSSYk=/1250x735/top/smart/cloudfront-us-east-1.images.arcpublishing.com/gruporepublica/MECOT2VHNBAKDELB2IVI3JZE3Y.jpg",
     },
     {
-      name: "Camaras & Fotografía",
+      name: "Camaras & Fotografias",
       img: "https://cdn.mos.cms.futurecdn.net/JN4id4eQ79r4c4JzHVNtH5.jpg",
     },
     {
@@ -28,7 +28,7 @@ const CatContainer = () => {
       img: "https://www.sony.es/image/5d5c8d0485d37c1b150022bd9819bb1d?fmt=pjpeg&wid=660&bgcolor=F1F5F9&bgc=F1F5F9",
     },
     {
-      name: "Consolas y Videojuegos",
+      name: "Consolas & Videojuegos",
       img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd_vlyqWIiNybGiRge0Udw4ksfkeyo-dyfQg&usqp=CAU",
     },
     {
