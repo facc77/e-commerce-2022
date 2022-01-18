@@ -81,10 +81,10 @@ const theme = createTheme({
 const pages = ["home", "productos", "compras", "contacto"];
 const categories = [
   "Televisores",
-  "Laptops y Computadoras",
-  "Camaras y Fotografía",
+  "Laptops & Computadoras",
+  "Camaras & Fotografias",
   "Smartphones & Tablets",
-  "Consolas y Videojuegos",
+  "Consolas & Videojuegos",
 ];
 
 const ResponsiveAppBar = () => {
@@ -203,7 +203,7 @@ const ResponsiveAppBar = () => {
                         <MenuItem
                           component={Link}
                           to={"/productos"}
-                          key={categorie} /* onClick={handleCloseNavMenu} */
+                          key={categorie}
                           onClick={() => callDispatch(categorie.toUpperCase())}
                         >
                           <Typography textAlign="center">
