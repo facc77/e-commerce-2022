@@ -5,6 +5,7 @@ import UsersBackoffice from "../pages/backoffice/UsersBackoffice";
 import CategoriesBackoffice from "../pages/backoffice/CategoriesBackoffice";
 import ProductsBackoffice from "../pages/backoffice/ProductsBackoffice";
 import NavbarPrivate from "../components/Navbar/private navbar/NavbarPrivate";
+import UserForm from "../components/Forms/UserForm";
 
 
 
@@ -20,6 +21,13 @@ const Privateroute = () => {
           <Route path="/categories" element={<CategoriesBackoffice />} />
           <Route path="/products" element={<ProductsBackoffice />} />
           <Route path="/users" element={<UsersBackoffice />} />
+          
+          {/* forms */}
+          <Route path="/users/create" element={<UserForm />} />
+          <Route path="/users/edit" element={<UserForm />} />
+
+
+
           <Route path="/" element={<HomeBackoffice />} />
         </Routes>
     </div>
