@@ -6,6 +6,7 @@ import CategoriesBackoffice from "../pages/backoffice/CategoriesBackoffice";
 import ProductsBackoffice from "../pages/backoffice/ProductsBackoffice";
 import NavbarPrivate from "../components/Navbar/private navbar/NavbarPrivate";
 import UserForm from "../components/Forms/UserForm";
+import CategoryForm from "../components/Forms/CategoryForm";
 
 
 
@@ -25,6 +26,8 @@ const Privateroute = () => {
           {/* forms */}
           <Route path="/users/create" element={<UserForm />} />
           <Route path="/users/edit" element={<UserForm />} />
+          <Route path="/categories/create" element={<CategoryForm />} />
+          <Route path="/categories/edit" element={<CategoryForm />} />
 
 
 
