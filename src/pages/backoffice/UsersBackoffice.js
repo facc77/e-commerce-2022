@@ -8,10 +8,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setEdit } from "../../redux/reducers/userReducer";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/system";
 
 const UsersBackoffice = () => {
   const { usuariosList, loading } = useSelector((state) => state.users);
@@ -19,20 +21,27 @@ const UsersBackoffice = () => {
   const dispatch = useDispatch();
 
   const handleEdit = (id) => {
-      dispatch(setEdit(id));
-      navigate("/backoffice/users/edit");
-  }
-
-
-
+    dispatch(setEdit(id));
+    navigate("/backoffice/users/edit");
+  };
+  const handleCreate = () => {
+    dispatch(setEdit(null));
+    navigate("/backoffice/users/create");
+  };
 
   return (
     <Container maxWidth="sx">
- 
       <Typography variant="h4" align="center" mt={5} mb={5}>
         Usuarios
-      </Typography>  
-
+      </Typography>
+      <Button
+        variant="contained"
+        startIcon={<AddBoxIcon />}
+        onClick={handleCreate}
+      >
+        Crear nuevo usuario
+      </Button>
+      <Box mb={2} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -57,7 +66,12 @@ const UsersBackoffice = () => {
                   <TableCell align="right">{row.role}</TableCell>
                   <TableCell align="right">
                     <ButtonGroup size="small" aria-label="small button group">
-                      <Button color="warning" onClick={()=>handleEdit(row.uid)}>Edit</Button>
+                      <Button
+                        color="warning"
+                        onClick={() => handleEdit(row.uid)}
+                      >
+                        Edit
+                      </Button>
                       <Button color="error">Delete</Button>
                     </ButtonGroup>
                   </TableCell>
