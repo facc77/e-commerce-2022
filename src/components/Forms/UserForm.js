@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
@@ -15,6 +16,8 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { Typography } from "@mui/material";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 import { postUsuarios, putUsuarios } from "../../redux/reducers/userReducer";
 
@@ -32,9 +35,18 @@ const validationSchema = yup.object({
     .required("Contraseña requerida"),
 });
 
+// alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const UserForm = () => {
   const dispatch = useDispatch();
-  const { usuariosList, active, loading } = useSelector((state) => state.users);
+  let navigate = useNavigate();
+  const { usuariosList, active, loading, error } = useSelector((state) => state.users);
+  const [alertConfig, setAlertConfig] = useState({open:false, msg:"", severity:""});
+  const [ok, setOk] = useState(false);
+
   let user = {};
 
   if(active){
@@ -42,6 +54,28 @@ const UserForm = () => {
     console.log(users[0]);
     user = users[0];
   }
+
+  //alert close
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlertConfig({open:false, msg:"", severity:""});
+  };
+
+
+  useEffect(() => {
+    if((loading === false) && (error === null) && (ok)){
+      console.log("succes");
+      setAlertConfig({open:true, msg:"usuario creado", severity:"success"});
+      navigate("/backoffice/users");
+    }
+    if((loading === false) && error){
+      console.log(error.msg);
+      setAlertConfig({open:true, msg:error.msg, severity:"error"})
+    }
+  }, [error, loading, navigate, ok]);
   
   const initialValues = active 
      ? {
@@ -60,11 +94,16 @@ const UserForm = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, {resetForm}) => {
       
-      active 
-       ? dispatch(putUsuarios({...values,active}))
-       : dispatch(postUsuarios(values));
+      if(active){
+        dispatch(putUsuarios({...values,active}))
+
+      }else{
+        dispatch(postUsuarios(values));
+        setOk(true)
+      }
+       resetForm();
     },
   });
 
@@ -151,6 +190,11 @@ const UserForm = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Snackbar open={alertConfig.open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={alertConfig.severity} sx={{ width: '100%' }}>
+          {alertConfig.msg}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
