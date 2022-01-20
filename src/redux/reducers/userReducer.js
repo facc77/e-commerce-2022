@@ -80,7 +80,6 @@ const userSlice = createSlice({
       state.loading = true;
     },
     [putUsuarios.fulfilled]: (state, action) => {
-      console.log(action.payload);
       action.payload.error
         ? (state.error = action.payload.error)
         : (state.usuariosList = state.usuariosList.map((user) =>

@@ -12,6 +12,8 @@ import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { postUsuarios, putUsuarios } from "../../redux/reducers/userReducer";
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
@@ -27,8 +29,8 @@ const validationSchema = yup.object({
 });
 
 const UserForm = () => {
+  const dispatch = useDispatch();
   const { usuariosList, active } = useSelector((state) => state.users);
-
   let user = {};
 
   if(active){
@@ -43,8 +45,7 @@ const UserForm = () => {
       email:user.email,
       role: user.role,
       password: "",
-
-       } 
+      } 
      :{
       name: "",
       email: "",
@@ -57,6 +58,9 @@ const UserForm = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      active 
+       ? dispatch(putUsuarios({...values,active}))
+       : dispatch(postUsuarios(values));
     },
   });
 

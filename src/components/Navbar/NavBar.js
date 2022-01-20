@@ -35,7 +35,7 @@ const NavBar = () => {
   };
 
   const handleClick = (e) => {
-    if ("Logout") {
+    if (e.target.textContent === "Logout") {
       dispatch(setLogout());
     }
   };
