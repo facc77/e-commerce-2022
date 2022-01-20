@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
@@ -11,9 +13,11 @@ import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { postUsuarios, putUsuarios } from "../../redux/reducers/userReducer";
+
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
@@ -30,7 +34,7 @@ const validationSchema = yup.object({
 
 const UserForm = () => {
   const dispatch = useDispatch();
-  const { usuariosList, active } = useSelector((state) => state.users);
+  const { usuariosList, active, loading } = useSelector((state) => state.users);
   let user = {};
 
   if(active){
@@ -57,7 +61,7 @@ const UserForm = () => {
     initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      
       active 
        ? dispatch(putUsuarios({...values,active}))
        : dispatch(postUsuarios(values));
@@ -141,6 +145,12 @@ const UserForm = () => {
           {active ? "Guardar" : "Crear" }
         </Button>
       </form>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };
