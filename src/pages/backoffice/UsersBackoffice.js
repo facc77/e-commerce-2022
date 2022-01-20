@@ -9,9 +9,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setEdit } from "../../redux/reducers/userReducer";
+import { useNavigate } from "react-router-dom";
 
 const UsersBackoffice = () => {
   const { usuariosList, loading } = useSelector((state) => state.users);
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleEdit = (id) => {
+      dispatch(setEdit(id));
+      navigate("/backoffice/users/edit");
+  }
+
+
+
+
   return (
     <Container maxWidth="sx">
  
@@ -43,7 +57,7 @@ const UsersBackoffice = () => {
                   <TableCell align="right">{row.role}</TableCell>
                   <TableCell align="right">
                     <ButtonGroup size="small" aria-label="small button group">
-                      <Button color="warning">Edit</Button>
+                      <Button color="warning" onClick={()=>handleEdit(row.uid)}>Edit</Button>
                       <Button color="error">Delete</Button>
                     </ButtonGroup>
                   </TableCell>
