@@ -10,6 +10,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
+import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
@@ -25,13 +27,33 @@ const validationSchema = yup.object({
 });
 
 const UserForm = () => {
-  const formik = useFormik({
-    initialValues: {
+  const { usuariosList, active } = useSelector((state) => state.users);
+
+  let user = {};
+
+  if(active){
+    const users = usuariosList.filter(us => us.uid === active);
+    console.log(users[0]);
+    user = users[0];
+  }
+  
+  const initialValues = active 
+     ? {
+      name: user.name,
+      email:user.email,
+      role: user.role,
+      password: "",
+
+       } 
+     :{
       name: "",
       email: "",
       role: "",
       password: "",
-    },
+      }
+
+  const formik = useFormik({
+    initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
@@ -40,6 +62,9 @@ const UserForm = () => {
 
   return (
     <Container maxWidth={"sm"}>
+     <Typography variant="h5" align="center" mt={5} mb={5}>
+       {active ? `Editar usuario ${user.name}` : "Crear usuario"}
+     </Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -109,7 +134,7 @@ const UserForm = () => {
           type="submit"
           m={"15"}
         >
-          Submit
+          {active ? "Guardar" : "Crear" }
         </Button>
       </form>
     </Container>
