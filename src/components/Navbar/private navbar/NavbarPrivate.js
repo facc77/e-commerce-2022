@@ -12,7 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import SideBar from './sideBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogout } from '../../../redux/reducers/authReducer';
 
 
 const settings = ['Home', 'Logout'];
@@ -20,6 +21,7 @@ const settings = ['Home', 'Logout'];
 const NavbarPrivate = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const {user} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
 
   const handleOpenUserMenu = (event) => {
@@ -27,8 +29,9 @@ const NavbarPrivate = () => {
   };
 
   const handleClick = (e) => {
-    console.log(e.target.text);
-    
+    if(e.target.textContent === "Logout"){
+       dispatch(setLogout());
+    }
   };
 
   const handleCloseUserMenu = () => {
