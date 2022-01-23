@@ -9,6 +9,8 @@ import { getProductos } from "../redux/reducers/productsReducer";
 import Privateroute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import RouterSpinner from "../components/RouterSpinner";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Approuter = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ const Approuter = () => {
 
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route path="/backoffice/*" element={<Privateroute />} />
         <Route path="/*" element={<PublicRoute />} />
