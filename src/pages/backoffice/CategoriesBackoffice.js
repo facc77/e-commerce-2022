@@ -8,17 +8,41 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setEditCate } from '../../redux/reducers/categorieReducer';
 
 const CategoriesBackoffice = () => {
   const {categoriasList, loading} = useSelector(state => state.categories);
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleEdit = (id) => {
+    dispatch(setEditCate(id));
+    navigate("/backoffice/categories/edit");
+  };
+  const handleCreate = () => {
+    dispatch(setEditCate(null));
+    navigate("/backoffice/categories/create");
+  };
+
+
  return (
   <Container maxWidth="sx">
  
       <Typography variant="h4" align="center" mt={5} mb={5}>
         Categorias
-      </Typography>  
-
+      </Typography> 
+      <Button
+        variant="contained"
+        startIcon={<AddBoxIcon />}
+        onClick={handleCreate}
+      >
+        Crear nueva Categoria
+      </Button>
+      <Box mb={2} /> 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -39,7 +63,7 @@ const CategoriesBackoffice = () => {
                   </TableCell>
                   <TableCell align="right">
                     <ButtonGroup size="small" aria-label="small button group">
-                      <Button color="warning">Edit</Button>
+                      <Button color="warning" onClick={()=>handleEdit(row.uid)}>Edit</Button>
                       <Button color="error">Delete</Button>
                     </ButtonGroup>
                   </TableCell>

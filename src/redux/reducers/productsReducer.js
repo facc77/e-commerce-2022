@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getCategories } from "../../services/categorie.service";
 import {
   getProducts,
+  getProductsByCategory,
   postProducts,
   putProducts,
 } from "../../services/product.service";
@@ -9,6 +11,22 @@ export const getProductos = createAsyncThunk(
   "productos/getProductos",
   async () => {
     return await getProducts();
+  }
+);
+export const getProductosPorCategoria = createAsyncThunk(
+  "productos/getProductosByCategory",
+  async () => {
+    const categoriesList = await getCategories();
+    async function pro(){
+      let products = [];
+      for (let i = 0; i < categoriesList.resp.data.length; i++) {
+        const productsData = await getProductsByCategory(categoriesList.resp.data[i].uid);
+        products = [{name:categoriesList.resp.data[i].name, data:productsData.resp.results}, ...products];
+      }
+      return products;
+    }  
+    
+    return await pro();
   }
 );
 
@@ -46,6 +64,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     productsList: [],
+    productsByCat:[],
     cart: [],
     loading: false,
     active: null,
@@ -135,7 +154,18 @@ const productsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-
+    //get por categoria
+    [getProductosPorCategoria.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getProductosPorCategoria.fulfilled]: (state, action) => {
+      state.productsByCat = action.payload;
+      state.loading = false;
+    },
+    [getProductosPorCategoria.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = "error";
+    },
     //post-----------------------------------------
     [postProductos.pending]: (state, action) => {
       state.loading = true;

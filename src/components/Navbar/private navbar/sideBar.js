@@ -18,7 +18,7 @@ const SideBar = ({ anchor, toggleDrawer }) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <Link to="/backoffice/users">
+        <Link to="/backoffice/users" style={{textDecoration:"none"}}>
           <ListItem button>
             <ListItemIcon>
               <GroupIcon />
@@ -26,7 +26,7 @@ const SideBar = ({ anchor, toggleDrawer }) => {
             <ListItemText primary={"Users"} />
           </ListItem>
         </Link>
-        <Link to="/backoffice/categories">
+        <Link to="/backoffice/categories" style={{textDecoration:"none"}}>
           <ListItem button>
             <ListItemIcon>
               <CategoryIcon />
@@ -34,7 +34,7 @@ const SideBar = ({ anchor, toggleDrawer }) => {
             <ListItemText primary={"Categories"} />
           </ListItem>
         </Link>
-        <Link to="/backoffice/products">
+        <Link to="/backoffice/products" style={{textDecoration:"none"}}>
           <ListItem button>
             <ListItemIcon>
               <LocalMallIcon />

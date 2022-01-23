@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { startRevalidation } from "../redux/reducers/authReducer";
 import { getCategorias } from "../redux/reducers/categorieReducer";
 import { getUsuarios } from "../redux/reducers/userReducer";
-import { getProductos } from "../redux/reducers/productsReducer";
+import { getProductos, getProductosPorCategoria } from "../redux/reducers/productsReducer";
 import Privateroute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import RouterSpinner from "../components/RouterSpinner";
@@ -18,6 +18,7 @@ const Approuter = () => {
 
   useEffect(() => {
     dispatch(getCategorias());
+    dispatch(getProductosPorCategoria());
     dispatch(getUsuarios());
     dispatch(getProductos());
     dispatch(startRevalidation());
