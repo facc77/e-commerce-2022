@@ -4,7 +4,7 @@ import {
   postProducts,
   putProducts,
 } from "../../services/product.service";
-
+import { toast } from "react-toastify";
 export const getProductos = createAsyncThunk(
   "productos/getProductos",
   async () => {
@@ -57,11 +57,71 @@ const productsSlice = createSlice({
       action.payload ? (state.active = action.payload) : (state.active = null);
     },
     setAddProduct(state, action) {
-      state.cart = [...state.cart, action.payload];
+      const itemIndex = state.cart.findIndex(
+        (cartItem) => cartItem._id === action.payload._id
+      );
+
+      if (state.cart.some((product) => product._id === action.payload._id)) {
+        state.cart[itemIndex].count += 1;
+        console.log("aumentar producto");
+        toast.info("Cantidad de producto aumentado!", {
+          position: "bottom-left",
+        });
+      } else {
+        state.cart = [...state.cart, action.payload];
+        console.log("agregar producto");
+        toast.success(`${action.payload.name} agregado al carrito!`, {
+          position: "bottom-left",
+        });
+      }
     },
-    /* setDeleteProduct(state, action) {
-      action.payload ? (state.active = action.payload) : (state.active = null);
-    }, */
+    resetCartOnLogOut(state, action) {
+      state.cart = [];
+    },
+    setDeleteProduct(state, action) {
+      const itemIndex = state.cart.findIndex(
+        (cartItem) => cartItem._id === action.payload._id
+      );
+      if (state.cart[itemIndex].count > 1) {
+        state.cart[itemIndex].count -= 1;
+      } else {
+        const restItems = state.cart.filter(
+          (product) => product._id !== action.payload._id
+        );
+        state.cart = restItems;
+        toast.success(`${action.payload.name} borrado del carrito!`, {
+          position: "bottom-left",
+        });
+      }
+    },
+    reduceCartProduct(state, action) {
+      const itemIndex = state.cart.findIndex(
+        (cartItem) => cartItem._id === action.payload._id
+      );
+      if (state.cart[itemIndex].count > 1) {
+        state.cart[itemIndex].count -= 1;
+        toast.info("Cantidad de producto disminuido!", {
+          position: "bottom-left",
+        });
+      } else {
+        const restItems = state.cart.filter(
+          (product) => product._id !== action.payload._id
+        );
+        state.cart = restItems;
+        toast.success(`${action.payload.name} borrado del carrito!`, {
+          position: "bottom-left",
+        });
+      }
+    },
+    deleteCartProduct(state, action) {
+      const restItems = state.cart.filter(
+        (product) => product._id !== action.payload._id
+      );
+      state.cart = restItems;
+      toast.success(`${action.payload.name} borrado del carrito!`, {
+        position: "bottom-left",
+      });
+    },
   },
   extraReducers: {
     [getProductos.pending]: (state, action) => {
@@ -112,6 +172,12 @@ const productsSlice = createSlice({
     },
   },
 });
-export const { setActiveProduct, setAddProduct } = productsSlice.actions;
+export const {
+  setActiveProduct,
+  setAddProduct,
+  resetCartOnLogOut,
+  reduceCartProduct,
+  deleteCartProduct,
+} = productsSlice.actions;
 
 export default productsSlice.reducer;
