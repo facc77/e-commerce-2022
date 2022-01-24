@@ -4,41 +4,93 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Image from "material-ui-image";
 import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
+import MenuItem from "@mui/material/MenuItem";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  setAddProduct,
+  setActiveProduct,
+} from "../redux/reducers/productsReducer";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-export default function MediaCard({ name, image, price, showIcons }) {
+export default function MediaCard({ product }) {
+  const { name, price, img, _id } = product;
+  const dispatch = useDispatch();
+  const { logged } = useSelector((state) => state.auth);
+
+  const verifyProduct = (productSelected) => {
+    let product = JSON.parse(JSON.stringify(productSelected));
+    product.count = 1;
+    dispatch(setAddProduct(product));
+  };
+
+  const callDispatch = (product) => {
+    logged
+      ? verifyProduct(product)
+      : toast.error("Debes loguearte para comprar!", {
+          position: "bottom-left",
+        });
+  };
+
+  const addProductDispatch = (name) => {
+    dispatch(setActiveProduct(name));
+  };
+
   return (
     <Card sx={{ width: 300, m: "3rem" }}>
-      {showIcons ? (
-        <Image
-          imageStyle={{
-            height: "80%",
-            width: "80%",
-            marginLeft: "2rem",
-            marginTop: "2rem",
-          }}
-          src={image}
-          alt="image"
-        />
-      ) : (
-        <Image src={image} alt="image" />
-      )}
-      <CardContent sx={{ textAlign: "center" }}>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          color="#151875"
+      <Image
+        imageStyle={{
+          height: "80%",
+          width: "80%",
+          marginLeft: "2rem",
+          marginTop: "2rem",
+        }}
+        src={img}
+        alt="image"
+      />
+      <CardContent
+        sx={{
+          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "15px",
+        }}
+      >
+        <MenuItem
+          key={_id}
+          component={Link}
+          to={`/detalleProducto/${product.category.name}/${product.name}`}
+          onClick={() => addProductDispatch(product.name)}
           sx={{
-            display: "inline",
-            fontSize: "15px",
-            fontFamily: "Josefin Sans",
-            textTransform: "capitalize",
+            padding: "0",
+            "&:hover": {
+              textDecoration: "underline",
+              backgroundColor: "#fff",
+            },
           }}
         >
-          {name}
-        </Typography>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            color="#151875"
+            sx={{
+              display: "inline",
+              fontSize: "15px",
+              fontFamily: "Josefin Sans",
+              textTransform: "capitalize",
+              "&:hover": {
+                textDecoration: "underline",
+                backgroundColor: "#fff",
+              },
+            }}
+          >
+            {name.length > 10 ? name.substring(0, 20) + "..." : name}
+          </Typography>
+        </MenuItem>
         <Typography
           variant="body2"
           color="#FB2448"
@@ -47,52 +99,58 @@ export default function MediaCard({ name, image, price, showIcons }) {
             fontSize: "16px",
             fontFamily: "Josefin Sans",
             marginLeft: "0.5rem",
-            marginTop: "0.15rem",
+            marginBottom: "0.25rem",
             float: "right",
           }}
         >
           {price ? `$${price}` : ""}
         </Typography>
       </CardContent>
-      {showIcons ? (
-        <>
-          <Box sx={{ position: "relative" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                position: "absolute",
-                top: "-120px",
-                left: "10px",
-              }}
-            >
-              <ShoppingCartOutlinedIcon
-                sx={{
-                  color: "#151875",
-                  fontSize: "22px",
-                  padding: "5px",
-                  margin: "0.25rem",
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              />
-              <FavoriteBorderOutlinedIcon
-                sx={{
-                  color: "#151875",
-                  fontSize: "22px",
-                  padding: "5px",
-                  margin: "0.25rem",
+      <Box sx={{ position: "relative" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            position: "absolute",
+            top: "-120px",
+            left: "10px",
+          }}
+        >
+          <ShoppingCartOutlinedIcon
+            sx={{
+              color: "#151875",
+              fontSize: "22px",
+              padding: "5px",
+              margin: "0.25rem",
+              transition: "1s",
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor: "#EBECF0",
+                borderRadius: "12px",
+              },
+              "&:active": {
+                backgroundColor: "#949494",
+                borderRadius: "12px",
+              },
+            }}
+            onClick={() => callDispatch(product)}
+          />
+          <FavoriteBorderOutlinedIcon
+            sx={{
+              color: "#151875",
+              fontSize: "22px",
+              padding: "5px",
+              margin: "0.25rem",
 
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
-        </>
-      ) : null}
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor: "#EBECF0",
+                borderRadius: "12px",
+              },
+            }}
+          />
+        </Box>
+      </Box>
     </Card>
   );
 }
