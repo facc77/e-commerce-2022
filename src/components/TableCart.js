@@ -9,48 +9,22 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useSelector } from "react-redux";
-import image1 from "../img/support1.png";
-import image2 from "../img/support2.png";
-import image3 from "../img/support3.png";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setAddProduct,
+  reduceCartProduct,
+  deleteCartProduct,
+} from "../redux/reducers/productsReducer";
 import Image from "material-ui-image";
 
-const rows = [
-  {
-    id: 1,
-    image: image1,
-    name: "producto1",
-    precio: "12312",
-    cantidad: "3",
-    total: "888",
-  },
-  {
-    id: 2,
-    image: image2,
-    name: "producto2",
-    precio: "122",
-    cantidad: "3",
-    total: "1234331",
-  },
-  {
-    id: 3,
-    image: image3,
-    name: "producto3",
-    precio: "567",
-    cantidad: "3",
-    total: "334",
-  },
-];
-
 export default function BasicTable() {
-  const handleClick = (product) => {
-    alert(product);
-  };
+  const dispatch = useDispatch();
 
-  const cartProdutcs = useSelector((state) => state.products.cart);
+  const cartProducts = useSelector((state) => state.products.cart);
+  console.log(cartProducts.length);
 
-  return (
+  return cartProducts.length > 0 ? (
     <TableContainer sx={{ border: 0, boxShadow: "none" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -59,16 +33,16 @@ export default function BasicTable() {
             <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Precio
             </TableCell>
-            {/* <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
+            <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Cantidad
             </TableCell>
             <TableCell align="right" sx={{ fontFamily: "Josefin Sans" }}>
               Total
-            </TableCell> */}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {cartProdutcs.map((product) => (
+          {cartProducts.map((product) => (
             <TableRow
               key={product.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -76,12 +50,16 @@ export default function BasicTable() {
               <TableCell component="th" scope="row">
                 <Box sx={{ height: "80px", width: "80px" }}>
                   <Image src={product.img} />
-                  <DeleteIcon
-                    onClick={() => handleClick(product)}
+                  <CancelIcon
+                    onClick={() => dispatch(deleteCartProduct(product))}
                     sx={{
                       position: "relative",
                       bottom: " 5rem",
-                      left: "4.5rem",
+                      left: "5rem",
+                      color: "#FF0000",
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
                     }}
                   />
                 </Box>
@@ -102,24 +80,36 @@ export default function BasicTable() {
               >
                 ${product.price}
               </TableCell>
-              {/* <TableCell align="right">
-                <Button sx={{ padding: "0rem" }}>+</Button>
-                {row.cantidad}
-                <Button padding="0rem" sx={{ padding: "0.5rem" }}>
+              <TableCell align="right">
+                <Button
+                  sx={{ padding: "0rem" }}
+                  onClick={() => dispatch(setAddProduct(product))}
+                >
+                  +
+                </Button>
+                {product.count}
+                <Button
+                  padding="0rem"
+                  sx={{ padding: "0.5rem" }}
+                  onClick={() => dispatch(reduceCartProduct(product))}
+                >
                   -
                 </Button>
-              </TableCell> 
+              </TableCell>
               <TableCell
                 align="right"
                 sx={{ fontFamily: "Josefin Sans", fontSize: "14px" }}
               >
-                ${row.precio * row.cantidad}
-              </TableCell>{" "}
-              */}
+                ${product.price * product.count}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+  ) : (
+    <Typography sx={{ fontFamily: "Josefin Sans", fontSize: "24px" }}>
+      No tienes productos en el carrito!
+    </Typography>
   );
 }
