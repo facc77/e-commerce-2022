@@ -202,7 +202,7 @@ const ResponsiveAppBar = () => {
                       {categories.map((categorie) => (
                         <MenuItem
                           component={Link}
-                          to={"/productos"}
+                          to={`/productos/${categorie}`}
                           key={categorie}
                           onClick={() => callDispatch(categorie.toUpperCase())}
                         >
