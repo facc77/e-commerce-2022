@@ -21,10 +21,12 @@ const ProductsScreen = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     MoreToLess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     MoreToLess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
   const [view, setView] = useState("grid");

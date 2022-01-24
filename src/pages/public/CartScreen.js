@@ -25,7 +25,7 @@ const CartScreen = () => {
         }}
       >
         <TableCart />
-        {cartProducts > 0 ? (
+        {cartProducts.length > 0 ? (
           <Box
             sx={{
               width: "40%",
