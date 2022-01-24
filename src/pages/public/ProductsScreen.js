@@ -15,7 +15,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const ProductsScreen = () => {
-  const activeCategory = useSelector((state) => state.categories.active);
   let { category } = useParams();
   category = category.toUpperCase();
 
