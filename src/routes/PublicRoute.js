@@ -26,8 +26,11 @@ const PublicRoute = () => {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/contacto" element={<ContactScreen />} />
           <Route path="/carrito" element={<CartScreen />} />
-          <Route path="/productos" element={<ProductsScreen />} />
-          <Route path="detalleProducto" element={<ProductDetailScreen />} />
+          <Route path="/productos/:category" element={<ProductsScreen />} />
+          <Route
+            path="detalleProducto/:category/:productName"
+            element={<ProductDetailScreen />}
+          />
         </Routes>
       </div>
       <Footer />
