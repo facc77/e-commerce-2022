@@ -7,6 +7,7 @@ import NotFoundScreen from "../pages/public/NotFoundScreen";
 import CartScreen from "../pages/public/CartScreen";
 import ProductsScreen from "../pages/public/ProductsScreen";
 import ProductDetailScreen from "../pages/public/ProductDetailScreen";
+import SearchScreen from "../pages/public/SearchScreen";
 import AuthRoute from "./AuthRoute";
 import NavBar from "../components/Navbar/NavBar";
 import DownNavBar from "../components/Navbar/DownNavBar";
@@ -31,6 +32,7 @@ const PublicRoute = () => {
             path="detalleProducto/:category/:productName"
             element={<ProductDetailScreen />}
           />
+          <Route path="/busqueda/:busqueda" element={<SearchScreen />} />
         </Routes>
       </div>
       <Footer />
