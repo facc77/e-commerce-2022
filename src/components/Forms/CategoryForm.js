@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
+import { postCategorias } from "../../redux/reducers/categorieReducer";
+import { useNavigate } from "react-router-dom";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
 });
+// alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const CategoryForm = () => {
-  const { categoriasList, active } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const { categoriasList, active, loading, error } = useSelector((state) => state.categories);
   const [imagePreview, setImagePreview] = useState("");
+  const [alertConfig, setAlertConfig] = useState({open:false, msg:"", severity:""});
+  const [ok, setOk] = useState(false);
+  let navigate = useNavigate();
+  
 
   let category = {};
 
@@ -33,6 +48,29 @@ const CategoryForm = () => {
     document.querySelector("#imgCa").click();
   };
 
+
+  //alert close
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlertConfig({open:false, msg:"", severity:""});
+  };
+
+
+  useEffect(() => {
+    if((loading === false) && (error === null) && (ok)){
+      setAlertConfig({open:true, msg:"categoria creada", severity:"success"});
+      navigate("/backoffice/categories");
+    }
+    if((loading === false) && error){
+      setAlertConfig({open:true, msg:error, severity:"error"})
+    }
+  }, [error, loading, navigate, ok]);
+
+
+
   const initialValues = active
     ? {
         name: category.name,
@@ -46,8 +84,16 @@ const CategoryForm = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values,{resetForm}) => {
+      if(active){
+         console.log("put");
+
+      }else{
+        dispatch(postCategorias(values));
+        setOk(true);
+        resetForm();
+        setImagePreview("")
+      }
     },
   });
 
@@ -109,6 +155,17 @@ const CategoryForm = () => {
           {active ? "Guardar" : "Crear"}
         </Button>
       </form>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar open={alertConfig.open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={alertConfig.severity} sx={{ width: '100%' }}>
+          {alertConfig.msg}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

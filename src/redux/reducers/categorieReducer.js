@@ -16,7 +16,10 @@ export const postCategorias = createAsyncThunk(
   "categorias/postcategorias",
   async (body) => {
     const { name, img} = body;
-    const urlImg = await imgUpload(img);
+    let urlImg = "";
+    if(img){
+      urlImg = await imgUpload(img);
+    }
     const resp = await postCategories({ name, img:urlImg });
     return resp;
   }
@@ -65,12 +68,15 @@ const categorieSlice = createSlice({
       state.loading = true;
     },
     [postCategorias.fulfilled]: (state, action) => {
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.categoriasList = [
-            ...state.categoriasList,
-            action.payload.resp.category,
-          ]);
+      if(action.payload.error){
+        state.error = action.payload.error.msg;
+      }else{
+        state.categoriasList = [
+          ...state.categoriasList,
+          action.payload.resp.category,
+        ]
+        state.error = null;
+      }
       state.loading = false;
     },
     [postCategorias.rejected]: (state, action) => {

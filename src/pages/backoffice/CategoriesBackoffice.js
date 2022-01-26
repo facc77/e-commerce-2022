@@ -61,7 +61,7 @@ const CategoriesBackoffice = () => {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                    { row.img ? (<Box
                       component="img"
                       sx={{
