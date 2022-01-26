@@ -28,8 +28,17 @@ export const postCategorias = createAsyncThunk(
 export const putCategorias = createAsyncThunk(
   "categorias/putCategorias",
   async (body) => {
-    const { name, active } = body;
-    const resp = await putCategories({ name }, active);
+    const { name, img, active } = body;
+    let resp;
+    if (img.name) {
+      const urlImg = await imgUpload(img);
+      resp = await putCategories(
+        {name, img: urlImg },
+        active
+      );
+    } else {
+      resp = await putCategories({ name, img }, active);
+    }
     return resp;
   }
 );
