@@ -89,7 +89,7 @@ const CategoriesBackoffice = () => {
                 </TableRow>
               ))
             ) : (
-              <div>generando lista..</div>
+              <TableRow><TableCell colSpan={4}>Generando lista...</TableCell></TableRow>
             )}
           </TableBody>
         </Table>
