@@ -17,15 +17,23 @@ export const getProductosPorCategoria = createAsyncThunk(
   "productos/getProductosByCategory",
   async () => {
     const categoriesList = await getCategories();
-    async function pro(){
+    async function pro() {
       let products = [];
       for (let i = 0; i < categoriesList.resp.data.length; i++) {
-        const productsData = await getProductsByCategory(categoriesList.resp.data[i].uid);
-        products = [{name:categoriesList.resp.data[i].name, data:productsData.resp.results}, ...products];
+        const productsData = await getProductsByCategory(
+          categoriesList.resp.data[i].uid
+        );
+        products = [
+          {
+            name: categoriesList.resp.data[i].name,
+            data: productsData.resp.results,
+          },
+          ...products,
+        ];
       }
       return products;
-    }  
-    
+    }
+
     return await pro();
   }
 );
@@ -64,10 +72,11 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     productsList: [],
-    productsByCat:[],
+    productsByCat: [],
     cart: [],
     loading: false,
     active: null,
+    activeBackoffice: null,
     error: null,
   },
   reducers: {
@@ -140,6 +149,11 @@ const productsSlice = createSlice({
       toast.success(`${action.payload.name} borrado del carrito!`, {
         position: "bottom-left",
       });
+    },
+    setEditPro(state, action) {
+      action.payload
+        ? (state.activeBackoffice = action.payload)
+        : (state.activeBackoffice = null);
     },
   },
   extraReducers: {
