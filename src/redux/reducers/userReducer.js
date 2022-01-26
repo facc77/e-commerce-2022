@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getUsers, postUsers, putUsers } from "../../services/user.service";
+import { deleteUSers, getUsers, postUsers, putUsers } from "../../services/user.service";
 
 
 export const getUsuarios = createAsyncThunk(
@@ -23,6 +23,14 @@ export const putUsuarios = createAsyncThunk(
   async (body) => {
     const { name, email, password, role, active } = body;
     const resp = await putUsers({ name, email, password, role }, active);
+    return resp;
+  }
+);
+
+export const deleteUsuarios = createAsyncThunk(
+  "usuarios/deleteUsuarios",
+  async (id) => {
+    const resp = await deleteUSers(id);
     return resp;
   }
 );
@@ -92,6 +100,20 @@ const userSlice = createSlice({
       state.loading = false;
     },
     [putUsuarios.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    //delete-----------------------------------------
+    [deleteUsuarios.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteUsuarios.fulfilled]: (state, action) => {
+      action.payload.error
+        ? (state.error = action.payload.error)
+        : (console.log(action.payload));
+      state.loading = false;
+    },
+    [deleteUsuarios.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
     },
