@@ -51,7 +51,6 @@ const UserForm = () => {
 
   if(active){
     const users = usuariosList.filter(us => us.uid === active);
-    console.log(users[0]);
     user = users[0];
   }
 
@@ -67,12 +66,10 @@ const UserForm = () => {
 
   useEffect(() => {
     if((loading === false) && (error === null) && (ok)){
-      console.log("succes");
       setAlertConfig({open:true, msg:"usuario creado", severity:"success"});
       navigate("/backoffice/users");
     }
     if((loading === false) && error){
-      console.log(error.msg);
       setAlertConfig({open:true, msg:error.msg, severity:"error"})
     }
   }, [error, loading, navigate, ok]);
@@ -97,7 +94,8 @@ const UserForm = () => {
     onSubmit: (values, {resetForm}) => {
       
       if(active){
-        dispatch(putUsuarios({...values,active}))
+        dispatch(putUsuarios({...values,active}));
+        setOk(true);
 
       }else{
         dispatch(postUsuarios(values));
