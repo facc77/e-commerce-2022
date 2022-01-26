@@ -1,11 +1,11 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Card from "./Card";
+import Card from "./CategoryCard";
 import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import { useDispatch } from "react-redux";
-import { setEditCate } from "../redux/reducers/categorieReducer";
+import { setEditCate } from "../../redux/reducers/categorieReducer";
 
 const CatContainer = () => {
   const dispatch = useDispatch();
@@ -64,15 +64,13 @@ const CatContainer = () => {
           <MenuItem
             key={id}
             component={Link}
-            to="/productos"
+            to={`/productos/${categorie.name}`}
             onClick={() => callDispatch(categorie.name.toUpperCase())}
           >
             <Card
               key={id}
               name={categorie.name}
               image={categorie.img || null}
-              price={null}
-              showIcons={false}
             />
           </MenuItem>
         ))}

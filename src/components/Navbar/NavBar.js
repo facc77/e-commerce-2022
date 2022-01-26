@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,7 +11,6 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MailIcon from "@mui/icons-material/Mail";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
@@ -19,12 +18,15 @@ import { Badge, Button, ButtonGroup } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setLogout } from "../../redux/reducers/authReducer";
+import { resetCartOnLogOut } from "../../redux/reducers/productsReducer";
 const settings = ["Backoffice", "Logout"];
 const NavBar = () => {
   const { logged, user } = useSelector((state) => state.auth);
   const ProductsCart = useSelector((state) => state.products.cart);
   const dispatch = useDispatch();
+
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorCart, setAnchorCart] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -34,14 +36,19 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
+  const handleOpenCartMenu = (event) => {
+    setAnchorCart(event.currentTarget);
+  };
+
+  const handleCloseCartMenu = () => {
+    setAnchorCart(null);
+  };
+
   const handleClick = (e) => {
     if (e.target.textContent === "Logout") {
       dispatch(setLogout());
+      dispatch(resetCartOnLogOut());
     }
-  };
-
-  const handleCartMenu = () => {
-    console.log("menu click");
   };
 
   return (
@@ -106,7 +113,7 @@ const NavBar = () => {
             <Tooltip title="Abrir Carrito">
               <IconButton
                 size="large"
-                onClick={handleOpenUserMenu}
+                onClick={handleOpenCartMenu}
                 color="inherit"
                 sx={{ p: 0 }}
               >
@@ -118,7 +125,7 @@ const NavBar = () => {
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
-              anchorEl={anchorElUser}
+              anchorEl={anchorCart}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -128,52 +135,72 @@ const NavBar = () => {
                 vertical: "top",
                 horizontal: "right",
               }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              open={Boolean(anchorCart)}
+              onClose={handleCloseCartMenu}
             >
-              {ProductsCart.map((product) => (
-                <MenuItem key={product} onClick={handleCartMenu}>
-                  <Grid container>
-                    <Grid item sx={{ heigth: "65px", width: "65px" }}>
-                      <Image
-                        imageStyle={{
-                          height: "100%",
-                          width: "100%",
-                        }}
-                        src={product.img}
-                        alt="image"
-                      />
-                    </Grid>
-                    <Grid>
-                      <Typography
-                        sx={{ fontFamily: "Lato", textTransform: "capitalize" }}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        color="#FB2448"
-                        sx={{
-                          fontFamily: "Lato",
-                          textTransform: "capitalize",
-                          float: "right",
-                          fontSize: "14px",
-                        }}
-                      >
-                        ${product.price}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </MenuItem>
-              ))}
-              <MenuItem component={Link} to="/carrito">
+              {ProductsCart.length !== 0 ? (
+                <>
+                  {ProductsCart.map((product) => (
+                    <MenuItem
+                      key={product}
+                      component={Link}
+                      to={`/detalleProducto/${product.category.name}/${product.name}`}
+                    >
+                      <Grid container sx={{ justifyContent: "space-between" }}>
+                        <Grid item sx={{ heigth: "65px", width: "65px" }}>
+                          <Image
+                            imageStyle={{
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            src={product.img}
+                            alt="image"
+                          />
+                        </Grid>
+                        <Grid>
+                          <Typography
+                            sx={{
+                              fontFamily: "Lato",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            {product.name}
+                          </Typography>
+                          <Typography
+                            color="#FB2448"
+                            sx={{
+                              fontFamily: "Lato",
+                              textTransform: "capitalize",
+                              float: "right",
+                              fontSize: "14px",
+                            }}
+                          >
+                            ${product.price} ({product.count})
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </MenuItem>
+                  ))}
+                  <MenuItem component={Link} to="/carrito">
+                    <Typography
+                      sx={{
+                        fontFamily: "Lato",
+                      }}
+                    >
+                      Ver todo el carrito
+                    </Typography>
+                  </MenuItem>
+                </>
+              ) : (
                 <Typography
                   sx={{
                     fontFamily: "Lato",
+                    padding: "0.25rem",
                   }}
                 >
-                  Ver todo el carrito
+                  No hay productos
                 </Typography>
-              </MenuItem>
+              )}
             </Menu>
           </Box>
 

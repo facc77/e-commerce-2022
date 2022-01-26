@@ -1,18 +1,38 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { setAddProduct } from "../redux/reducers/productsReducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAddProduct,
+  setActiveProduct,
+} from "../redux/reducers/productsReducer";
+import { toast } from "react-toastify";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Image from "material-ui-image";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 const HorizontalCard = ({ product }) => {
+  const { logged } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
-  const callDispatch = (product) => {
-    console.log(product);
+  const verifyProduct = (productSelected) => {
+    let product = JSON.parse(JSON.stringify(productSelected));
+    product.count = 1;
     dispatch(setAddProduct(product));
+  };
+  const addProductDispatch = (name) => {
+    dispatch(setActiveProduct(name));
+  };
+
+  const callDispatch = (product) => {
+    logged
+      ? verifyProduct(product)
+      : toast.error("Debes loguearte para comprar!", {
+          position: "bottom-left",
+        });
   };
   return (
     <>
@@ -40,17 +60,31 @@ const HorizontalCard = ({ product }) => {
           </Grid>
 
           <Grid item xs={6} md={9} mt={5}>
-            <Typography
-              variant="h5"
-              m={1}
+            <MenuItem
+              component={Link}
+              to={`/detalleProducto/${product.category.name}/${product.name}`}
+              onClick={() => addProductDispatch(product.name)}
               sx={{
-                fontFamily: "Josefin Sans",
-                fontSize: "20px",
-                color: "#111C85",
+                padding: "0",
+                "&:hover": {
+                  textDecoration: "underline",
+                  backgroundColor: "#fff",
+                },
               }}
             >
-              {product.name}
-            </Typography>
+              <Typography
+                variant="h5"
+                m={1}
+                sx={{
+                  fontFamily: "Josefin Sans",
+                  fontSize: "20px",
+                  color: "#111C85",
+                }}
+              >
+                {product.name}
+              </Typography>
+            </MenuItem>
+
             <Typography
               variant="h5"
               m={1}
@@ -83,6 +117,12 @@ const HorizontalCard = ({ product }) => {
                   margin: "0.25rem",
                   "&:hover": {
                     cursor: "pointer",
+                    backgroundColor: "#EBECF0",
+                    borderRadius: "12px",
+                  },
+                  "&:active": {
+                    backgroundColor: "#949494",
+                    borderRadius: "12px",
                   },
                 }}
                 onClick={() => callDispatch(product)}
@@ -95,6 +135,12 @@ const HorizontalCard = ({ product }) => {
                   margin: "0.25rem",
                   "&:hover": {
                     cursor: "pointer",
+                    backgroundColor: "#EBECF0",
+                    borderRadius: "12px",
+                  },
+                  "&:active": {
+                    backgroundColor: "#949494",
+                    borderRadius: "12px",
                   },
                 }}
               />
