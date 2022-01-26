@@ -29,11 +29,14 @@ export const putCategorias = createAsyncThunk(
   "categorias/putCategorias",
   async (body) => {
     const { name, img, active } = body;
+    console.log(img);
     let resp;
     if (img.name) {
+      console.log(img.name);
       const urlImg = await imgUpload(img);
+      console.log(urlImg);
       resp = await putCategories(
-        {name, img: urlImg },
+        {name, img:urlImg },
         active
       );
     } else {
@@ -98,8 +101,9 @@ const categorieSlice = createSlice({
       state.loading = true;
     },
     [putCategorias.fulfilled]: (state, action) => {
+      console.log(action.payload.resp);
       action.payload.error
-        ? (state.error = action.payload.error)
+        ? (state.error = action.payload.error.msg)
         : (state.categoriasList = state.categoriasList.map((category) =>
             category.uid === action.payload.resp.categorie.uid
               ? action.payload.resp.categorie

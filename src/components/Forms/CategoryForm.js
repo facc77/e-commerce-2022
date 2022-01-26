@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import { postCategorias } from "../../redux/reducers/categorieReducer";
+import { postCategorias, putCategorias } from "../../redux/reducers/categorieReducer";
 import { useNavigate } from "react-router-dom";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -36,7 +36,6 @@ const CategoryForm = () => {
 
   if (active) {
     const categories = categoriasList.filter((ca) => ca.uid === active);
-    console.log(categories[0]);
     category = categories[0];
   }
 
@@ -86,8 +85,8 @@ const CategoryForm = () => {
     validationSchema: validationSchema,
     onSubmit: (values,{resetForm}) => {
       if(active){
-         console.log("put");
-
+         dispatch(putCategorias({...values, active}));
+         setOk(true);
       }else{
         dispatch(postCategorias(values));
         setOk(true);
@@ -143,6 +142,9 @@ const CategoryForm = () => {
           {imagePreview && (
             <img width={"100%"} src={URL.createObjectURL(imagePreview)} alt={"imgPreview"} />
           )}
+          {
+            (active && category.img) && <img width={"100%"} src={category.img} alt={category.name} />
+          }
         </Box>
         <Box mt={2} />
         <Button
