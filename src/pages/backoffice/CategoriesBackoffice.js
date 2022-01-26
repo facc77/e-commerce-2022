@@ -9,11 +9,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import Skeleton from '@mui/material/Skeleton'
+import Skeleton from "@mui/material/Skeleton";
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setEditCate } from "../../redux/reducers/categorieReducer";
+import {
+  deleteCategorias,
+  setEditCate,
+} from "../../redux/reducers/categorieReducer";
 
 const CategoriesBackoffice = () => {
   const { categoriasList, loading } = useSelector((state) => state.categories);
@@ -27,6 +30,9 @@ const CategoriesBackoffice = () => {
   const handleCreate = () => {
     dispatch(setEditCate(null));
     navigate("/backoffice/categories/create");
+  };
+  const handleDelete = (id) => {
+    dispatch(deleteCategorias(id));
   };
 
   return (
@@ -62,18 +68,21 @@ const CategoriesBackoffice = () => {
                     {row.name}
                   </TableCell>
                   <TableCell>
-                   { row.img ? (<Box
-                      component="img"
-                      sx={{
-                        height: 50,
-                        width: 50,
-                        maxHeight: { xs: 60, md: 40 },
-                        maxWidth: { xs: 60, md: 40 },
-                      }}
-                      alt={row.name}
-                      src={row.img}
-                    />)
-                    :  (<Skeleton variant="rectangular" width={50} height={50} />)}
+                    {row.img ? (
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 50,
+                          width: 50,
+                          maxHeight: { xs: 60, md: 40 },
+                          maxWidth: { xs: 60, md: 40 },
+                        }}
+                        alt={row.name}
+                        src={row.img}
+                      />
+                    ) : (
+                      <Skeleton variant="rectangular" width={50} height={50} />
+                    )}
                   </TableCell>
                   <TableCell align="right">
                     <ButtonGroup size="small" aria-label="small button group">
@@ -83,13 +92,20 @@ const CategoriesBackoffice = () => {
                       >
                         Edit
                       </Button>
-                      <Button color="error">Delete</Button>
+                      <Button
+                        color="error"
+                        onClick={() => handleDelete(row.uid)}
+                      >
+                        Delete
+                      </Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
-              <TableRow><TableCell colSpan={4}>Generando lista...</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={4}>Generando lista...</TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
