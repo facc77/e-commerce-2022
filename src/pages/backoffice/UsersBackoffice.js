@@ -34,7 +34,7 @@ const UsersBackoffice = () => {
 
   return (
     <Container maxWidth="sx">
-      <Typography component={'span'} variant="h4" align="center" mt={5} mb={5}>
+      <Typography variant="h4" align="center" mt={5} mb={5}>
         Usuarios
       </Typography>
       <Button
