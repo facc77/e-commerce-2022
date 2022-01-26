@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setEdit } from "../../redux/reducers/userReducer";
+import { deleteUsuarios, setEdit } from "../../redux/reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 
@@ -28,10 +28,13 @@ const UsersBackoffice = () => {
     dispatch(setEdit(null));
     navigate("/backoffice/users/create");
   };
+  const handleDelete = (id) => {
+    dispatch(deleteUsuarios(id));
+  }
 
   return (
     <Container maxWidth="sx">
-      <Typography variant="h4" align="center" mt={5} mb={5}>
+      <Typography component={'span'} variant="h4" align="center" mt={5} mb={5}>
         Usuarios
       </Typography>
       <Button
@@ -72,13 +75,16 @@ const UsersBackoffice = () => {
                       >
                         Edit
                       </Button>
-                      <Button color="error">Delete</Button>
+                      <Button 
+                         color="error"
+                         onClick={()=> handleDelete(row.uid)}
+                         >Delete</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
-              <div>generando lista..</div>
+              <TableRow><TableCell colSpan={4}>Generando lista...</TableCell></TableRow>
             )}
           </TableBody>
         </Table>

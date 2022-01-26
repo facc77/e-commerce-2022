@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getUsers, postUsers, putUsers } from "../../services/user.service";
+import { deleteUsers, getUsers, postUsers, putUsers } from "../../services/user.service";
 
 
 export const getUsuarios = createAsyncThunk(
@@ -23,6 +23,15 @@ export const putUsuarios = createAsyncThunk(
   async (body) => {
     const { name, email, password, role, active } = body;
     const resp = await putUsers({ name, email, password, role }, active);
+    return resp;
+  }
+);
+
+export const deleteUsuarios = createAsyncThunk(
+  "usuarios/deleteUsuarios",
+  async (id) => {
+    const resp = await deleteUsers(id);
+    console.log(resp);
     return resp;
   }
 );
@@ -61,13 +70,15 @@ const userSlice = createSlice({
       state.loading = true;
     },
     [postUsuarios.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.usuariosList = [
-            ...state.usuariosList,
-            action.payload.resp.user,
-          ]);
+      if(action.payload.error){
+        state.error = action.payload.error.errors[0];
+      }else{
+        state.usuariosList = [
+          ...state.usuariosList,
+          action.payload.resp.user,
+        ]
+        state.error = null;
+      }
       state.loading = false;
     },
     [postUsuarios.rejected]: (state, action) => {
@@ -80,7 +91,6 @@ const userSlice = createSlice({
       state.loading = true;
     },
     [putUsuarios.fulfilled]: (state, action) => {
-      console.log(action.payload);
       action.payload.error
         ? (state.error = action.payload.error)
         : (state.usuariosList = state.usuariosList.map((user) =>
@@ -91,6 +101,20 @@ const userSlice = createSlice({
       state.loading = false;
     },
     [putUsuarios.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    //delete-----------------------------------------
+    [deleteUsuarios.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteUsuarios.fulfilled]: (state, action) => {
+      action.payload.error
+        ? (state.error = action.payload.error)
+        : (state.usuariosList = state.usuariosList.filter(fil => fil.uid !== action.payload.resp.user.uid));
+      state.loading = false;
+    },
+    [deleteUsuarios.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
     },

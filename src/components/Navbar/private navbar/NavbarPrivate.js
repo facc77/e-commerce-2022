@@ -12,20 +12,26 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import SideBar from './sideBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogout } from '../../../redux/reducers/authReducer';
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Home', 'Logout'];
 
 const NavbarPrivate = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const {user} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    
+  const handleClick = (e) => {
+    if(e.target.textContent === "Logout"){
+       dispatch(setLogout());
+    }
   };
 
   const handleCloseUserMenu = () => {
@@ -74,7 +80,7 @@ const NavbarPrivate = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user.name} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -94,7 +100,7 @@ const NavbarPrivate = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
+                <MenuItem key={setting} onClick={(e)=>handleClick(e)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
