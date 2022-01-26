@@ -14,8 +14,8 @@ export const getCategorias = createAsyncThunk(
 export const postCategorias = createAsyncThunk(
   "categorias/postcategorias",
   async (body) => {
-    const { name } = body;
-    const resp = await postCategories({ name });
+    const { name, img} = body;
+    const resp = await postCategories({ name, img });
     return resp;
   }
 );
