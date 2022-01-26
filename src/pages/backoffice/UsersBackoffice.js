@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setEdit } from "../../redux/reducers/userReducer";
+import { deleteUsuarios, setEdit } from "../../redux/reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 
@@ -28,6 +28,9 @@ const UsersBackoffice = () => {
     dispatch(setEdit(null));
     navigate("/backoffice/users/create");
   };
+  const handleDelete = (id) => {
+    dispatch(deleteUsuarios(id));
+  }
 
   return (
     <Container maxWidth="sx">
@@ -72,7 +75,10 @@ const UsersBackoffice = () => {
                       >
                         Edit
                       </Button>
-                      <Button color="error">Delete</Button>
+                      <Button 
+                         color="error"
+                         onClick={()=> handleDelete(row.uid)}
+                         >Delete</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>

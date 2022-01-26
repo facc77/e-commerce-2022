@@ -20,7 +20,7 @@ export const fetchPrivate = ( endpoint, data, method = 'GET', id) => {
              'Content-type': 'application/json',
              'x-token': token
          },
-         body: JSON.stringify( data )
+         body:  data ? JSON.stringify( data ) : null
      });
  }
 }
