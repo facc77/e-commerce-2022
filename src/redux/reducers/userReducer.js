@@ -105,19 +105,19 @@ const userSlice = createSlice({
       state.loading = false;
     },
     //delete-----------------------------------------
-    // [deleteUsuarios.pending]: (state, action) => {
-    //   state.loading = true;
-    // },
-    // [deleteUsuarios.fulfilled]: (state, action) => {
-    //   action.payload.error
-    //     ? (state.error = action.payload.error)
-    //     : (console.log(action.payload));
-    //   state.loading = false;
-    // },
-    // [deleteUsuarios.rejected]: (state, action) => {
-    //   state.error = action.payload;
-    //   state.loading = false;
-    // },
+    [deleteUsuarios.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteUsuarios.fulfilled]: (state, action) => {
+      action.payload.error
+        ? (state.error = action.payload.error)
+        : (state.usuariosList = state.usuariosList.filter(fil => fil.uid !== action.payload.resp.user.uid));
+      state.loading = false;
+    },
+    [deleteUsuarios.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 

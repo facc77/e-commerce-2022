@@ -34,7 +34,7 @@ const UsersBackoffice = () => {
 
   return (
     <Container maxWidth="sx">
-      <Typography variant="h4" align="center" mt={5} mb={5}>
+      <Typography component={'span'} variant="h4" align="center" mt={5} mb={5}>
         Usuarios
       </Typography>
       <Button
@@ -84,7 +84,7 @@ const UsersBackoffice = () => {
                 </TableRow>
               ))
             ) : (
-              <div>generando lista..</div>
+              <TableRow><TableCell colSpan={4}>Generando lista...</TableCell></TableRow>
             )}
           </TableBody>
         </Table>
