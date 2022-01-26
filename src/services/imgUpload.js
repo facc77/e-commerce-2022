@@ -1,4 +1,4 @@
-export const uploadImage = async (file) => {
+export const imgUpload = async (file) => {
  const url = process.env.REACT_APP_URL_CLAUDINARY;
 
  const formData = new FormData();

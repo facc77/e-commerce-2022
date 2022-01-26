@@ -4,6 +4,7 @@ import {
   postCategories,
   putCategories,
 } from "../../services/categorie.service";
+import { imgUpload } from "../../services/imgUpload";
 
 export const getCategorias = createAsyncThunk(
   "categorias/getCategorias",
@@ -15,7 +16,8 @@ export const postCategorias = createAsyncThunk(
   "categorias/postcategorias",
   async (body) => {
     const { name, img} = body;
-    const resp = await postCategories({ name, img });
+    const urlImg = await imgUpload(img);
+    const resp = await postCategories({ name, img:urlImg });
     return resp;
   }
 );
