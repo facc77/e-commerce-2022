@@ -31,7 +31,6 @@ export const deleteUsuarios = createAsyncThunk(
   "usuarios/deleteUsuarios",
   async (id) => {
     const resp = await deleteUsers(id);
-    console.log(resp);
     return resp;
   }
 );

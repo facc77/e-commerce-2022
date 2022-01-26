@@ -3,6 +3,7 @@ import {
   getCategories,
   postCategories,
   putCategories,
+  deleteCategories,
 } from "../../services/categorie.service";
 import { imgUpload } from "../../services/imgUpload";
 
@@ -15,12 +16,12 @@ export const getCategorias = createAsyncThunk(
 export const postCategorias = createAsyncThunk(
   "categorias/postcategorias",
   async (body) => {
-    const { name, img} = body;
+    const { name, img } = body;
     let urlImg = "";
-    if(img){
+    if (img) {
       urlImg = await imgUpload(img);
     }
-    const resp = await postCategories({ name, img:urlImg });
+    const resp = await postCategories({ name, img: urlImg });
     return resp;
   }
 );
@@ -35,13 +36,18 @@ export const putCategorias = createAsyncThunk(
       console.log(img.name);
       const urlImg = await imgUpload(img);
       console.log(urlImg);
-      resp = await putCategories(
-        {name, img:urlImg },
-        active
-      );
+      resp = await putCategories({ name, img: urlImg }, active);
     } else {
       resp = await putCategories({ name, img }, active);
     }
+    return resp;
+  }
+);
+
+export const deleteCategorias = createAsyncThunk(
+  "categorias/deleteCategorias",
+  async (id) => {
+    const resp = await deleteCategories(id);
     return resp;
   }
 );
@@ -80,13 +86,13 @@ const categorieSlice = createSlice({
       state.loading = true;
     },
     [postCategorias.fulfilled]: (state, action) => {
-      if(action.payload.error){
+      if (action.payload.error) {
         state.error = action.payload.error.msg;
-      }else{
+      } else {
         state.categoriasList = [
           ...state.categoriasList,
           action.payload.resp.category,
-        ]
+        ];
         state.error = null;
       }
       state.loading = false;
@@ -112,6 +118,20 @@ const categorieSlice = createSlice({
       state.loading = false;
     },
     [putCategorias.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    //delete-----------------------------------------
+    [deleteCategorias.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteCategorias.fulfilled]: (state, action) => {
+      action.payload.error
+        ? (state.error = action.payload.error)
+        : (state.categoriasList = state.categoriasList.filter(fil => fil.uid !== action.payload.resp.category.uid));
+      state.loading = false;
+    },
+    [deleteCategorias.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
     },
