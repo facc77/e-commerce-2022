@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,18 +8,35 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Divider, Typography } from "@mui/material";
 import { Box } from '@mui/system';
+import { setEditPro } from '../../redux/reducers/productsReducer';
 
 const ProductsBackoffice = () => {
   const {loading, productsByCat} = useSelector(state => state.products);
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  const handleCreate = () => {
+      dispatch(setEditPro(null));
+      navigate("/backoffice/products/create");
+  }
+ 
  return (
   <Container maxWidth="sx">
  
       <Typography variant="h4" align="center" mt={5} mb={5}>
         Products
       </Typography>  
+      <Button
+        variant="contained"
+        startIcon={<AddBoxIcon />}
+        onClick={handleCreate}
+      >
+        Crear nuevo Producto
+      </Button>
 
 
       {!loading 

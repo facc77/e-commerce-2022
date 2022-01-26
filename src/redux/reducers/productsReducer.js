@@ -222,6 +222,7 @@ export const {
   resetCartOnLogOut,
   reduceCartProduct,
   deleteCartProduct,
+  setEditPro
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
