@@ -10,6 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Skeleton from "@mui/material/Skeleton";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +19,7 @@ import {
   deleteCategorias,
   setEditCate,
 } from "../../redux/reducers/categorieReducer";
+import { questionAlert, successAlert } from "../../helpers/alert";
 
 const CategoriesBackoffice = () => {
   const { categoriasList, loading } = useSelector((state) => state.categories);
@@ -32,7 +35,13 @@ const CategoriesBackoffice = () => {
     navigate("/backoffice/categories/create");
   };
   const handleDelete = (id) => {
-    dispatch(deleteCategorias(id));
+    questionAlert("estás seguro de eliminar la categoria?").then((resp) => {
+      if (resp) {
+        dispatch(deleteCategorias(id));
+      } else {
+        successAlert("", "Cancelado");
+      }
+    });
   };
 
   return (
@@ -110,6 +119,12 @@ const CategoriesBackoffice = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };

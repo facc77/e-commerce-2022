@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { successAlert } from "../../helpers/alert";
 import {
   getCategories,
   postCategories,
@@ -123,9 +124,12 @@ const categorieSlice = createSlice({
       state.loading = true;
     },
     [deleteCategorias.fulfilled]: (state, action) => {
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.categoriasList = state.categoriasList.filter(fil => fil.uid !== action.payload.resp.category.uid));
+      if(action.payload.error){
+        (state.error = action.payload.error)
+      }else{
+        (state.categoriasList = state.categoriasList.filter(fil => fil.uid !== action.payload.resp.category.uid));
+         successAlert("","Categoria borrada!");
+      }
       state.loading = false;
     },
     [deleteCategorias.rejected]: (state, action) => {
