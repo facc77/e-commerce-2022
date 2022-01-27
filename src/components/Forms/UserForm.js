@@ -51,7 +51,7 @@ const UserForm = () => {
 
   useEffect(() => {
     if (loading === false && error === null && ok) {
-      toast.success(`Usuario creado!`, {
+      toast.success(active ? `Usuario actualizado!` : `Usuario creado!`, {
         position: "bottom-left",
         theme:"colored"
       });
@@ -63,7 +63,7 @@ const UserForm = () => {
         theme: "colored"
         });
     }
-  }, [error, loading, navigate, ok]);
+  }, [active, error, loading, navigate, ok]);
 
   const initialValues = active
     ? {
