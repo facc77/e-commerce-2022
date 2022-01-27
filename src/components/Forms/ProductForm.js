@@ -11,12 +11,15 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { toast } from "react-toastify";
-import { postProductos, putProductos } from "../../redux/reducers/productsReducer";
+import {
+  postProductos,
+  putProductos,
+} from "../../redux/reducers/productsReducer";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
@@ -35,7 +38,9 @@ const validationSchema = yup.object({
 
 const ProductForm = () => {
   const dispatch = useDispatch();
-  const { productsList, activeBackoffice, error } = useSelector((state) => state.products);
+  const { productsList, activeBackoffice, error } = useSelector(
+    (state) => state.products
+  );
   const loadingP = useSelector((state) => state.products.loading);
   const { categoriasList, loading } = useSelector((state) => state.categories);
   const [imagePreview, setImagePreview] = useState("");
@@ -50,45 +55,47 @@ const ProductForm = () => {
   }
 
   useEffect(() => {
-    if((loadingP === false) && (error === null) && (ok)){
-      toast.success(activeBackoffice ? "Producto actualizado!" : " Producto creado!",{position:"bottom-left"})
+    if (loadingP === false && error === null && ok) {
+      toast.success(
+        activeBackoffice ? "Producto actualizado!" : " Producto creado!",
+        { position: "bottom-left", theme: "colored" }
+      );
       navigate("/backoffice/products");
     }
-    if((loadingP === false) && error){
+    if (loadingP === false && error) {
       toast.error(`${error}`, {
         position: "bottom-left",
-      })
+        theme: "colored",
+      });
     }
   }, [activeBackoffice, error, loadingP, navigate, ok]);
-  
 
   const initialValues = activeBackoffice
-    ?{
-      name: product.name,
-      category: product.category._id,
-      img: product.img,
-      shortDescription: product.shortDescription,
-      description: product.description,
-      price: product.price,
-
-    }
-    :{
-      name: "",
-      category: "",
-      img: "",
-      shortDescription: "",
-      description: "",
-      price: "",
-    };
+    ? {
+        name: product.name,
+        category: product.category._id,
+        img: product.img,
+        shortDescription: product.shortDescription,
+        description: product.description,
+        price: product.price,
+      }
+    : {
+        name: "",
+        category: "",
+        img: "",
+        shortDescription: "",
+        description: "",
+        price: "",
+      };
 
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values, {resetForm}) => {
-      if(activeBackoffice){
-        dispatch(putProductos({...values, activeBackoffice}));
+    onSubmit: (values, { resetForm }) => {
+      if (activeBackoffice) {
+        dispatch(putProductos({ ...values, activeBackoffice }));
         setOk(true);
-      }else{
+      } else {
         dispatch(postProductos(values));
         setOk(true);
       }
@@ -184,9 +191,9 @@ const ProductForm = () => {
               alt={"imgPreview"}
             />
           )}
-          {
-          (activeBackoffice && product.img) && <img width={"100%"} src={product.img} alt={product.name} />
-          }
+          {activeBackoffice && product.img && (
+            <img width={"100%"} src={product.img} alt={product.name} />
+          )}
         </Box>
         <Box mt={1} />
         <TextField
@@ -251,7 +258,7 @@ const ProductForm = () => {
         </Button>
       </form>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loadingP}
       >
         <CircularProgress color="inherit" />

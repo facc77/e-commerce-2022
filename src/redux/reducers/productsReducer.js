@@ -9,6 +9,7 @@ import {
 } from "../../services/product.service";
 import { toast } from "react-toastify";
 import { imgUpload } from "../../services/imgUpload";
+import { successAlert } from "../../helpers/alert";
 
 export const getProductos = createAsyncThunk(
   "productos/getProductos",
@@ -287,6 +288,7 @@ const productsSlice = createSlice({
           }
           return ca;
         });
+        successAlert("","Producto borrado");
       }
       state.loading = false;
     },

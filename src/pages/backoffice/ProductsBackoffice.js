@@ -10,10 +10,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Paper from "@mui/material/Paper";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Button, ButtonGroup, Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Skeleton from "@mui/material/Skeleton";
 import { deleteProductos, setEditPro } from "../../redux/reducers/productsReducer";
+import { questionAlert, successAlert } from "../../helpers/alert";
 
 const ProductsBackoffice = () => {
   const { loading, productsByCat } = useSelector((state) => state.products);
@@ -30,7 +33,11 @@ const ProductsBackoffice = () => {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteProductos(id));
+    questionAlert("estás seguro de eliminar este Producto?").then(resp => {
+      resp
+        ? dispatch(deleteProductos(id))
+        : successAlert("","Cancelado"); 
+    });
   }
 
   return (
@@ -126,6 +133,12 @@ const ProductsBackoffice = () => {
       ) : (
         <div>generando lista..</div>
       )}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };
