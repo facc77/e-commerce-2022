@@ -7,6 +7,7 @@ import {
   putProducts,
 } from "../../services/product.service";
 import { toast } from "react-toastify";
+import { imgUpload } from "../../services/imgUpload";
 export const getProductos = createAsyncThunk(
   "productos/getProductos",
   async () => {
@@ -26,6 +27,7 @@ export const getProductosPorCategoria = createAsyncThunk(
         products = [
           {
             name: categoriesList.resp.data[i].name,
+            uid: categoriesList.resp.data[i].uid,
             data: productsData.resp.results,
           },
           ...products,
@@ -41,13 +43,18 @@ export const getProductosPorCategoria = createAsyncThunk(
 export const postProductos = createAsyncThunk(
   "productos/postProductos",
   async (body) => {
-    const { name, category, price, description, img } = body;
+    const { name, category, price, description, shortDescription, img } = body;
+    let urlImg = "";
+    if (img) {
+      urlImg = await imgUpload(img);
+    }
     const resp = await postProducts({
       name,
       category,
       price,
+      shortDescription,
       description,
-      img,
+      img:urlImg,
     });
     return resp;
   }
@@ -185,12 +192,21 @@ const productsSlice = createSlice({
       state.loading = true;
     },
     [postProductos.fulfilled]: (state, action) => {
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.productsList = [
-            ...state.productsList,
-            action.payload.resp.category,
-          ]);
+      console.log(action.payload);
+      if (action.payload.error) {
+        state.error = action.payload.error.msg;
+      } else {
+        state.productsList = [
+          ...state.productsList,
+          action.payload.resp.product,
+        ];
+        state.productsByCat = state.productsByCat.map(cat => {
+          if(cat.uid === action.payload.resp.product.category)
+          {cat.data = [...cat.data, action.payload.resp.product]} 
+           return cat 
+        });
+        state.error = null;
+      }
       state.loading = false;
     },
     [postProductos.rejected]: (state, action) => {

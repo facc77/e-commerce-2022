@@ -10,8 +10,10 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
+import { Typography } from "@mui/material";
+import { postProductos } from "../../redux/reducers/productsReducer";
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
@@ -19,6 +21,9 @@ const validationSchema = yup.object({
     .string("Selecciona la categoria")
     .required("Categoria requerida"),
   img: yup.string("seleccione imagen").required("Imagen requerida"),
+  shortDescription: yup
+    .string("Escribe la descripcion corta")
+    .required("shortDescription requerida"),
   description: yup
     .string("Escribe la descripción")
     .required("Descripción requerida"),
@@ -26,20 +31,46 @@ const validationSchema = yup.object({
 });
 
 const ProductForm = () => {
-  const { loading, categoriasList } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const { productsList, activeBackoffice } = useSelector((state) => state.products);
+  const { categoriasList, loading } = useSelector((state) => state.categories);
   const [imagePreview, setImagePreview] = useState("");
 
-  const formik = useFormik({
-    initialValues: {
+  let product = {};
+
+  if (activeBackoffice) {
+    const productos = productsList.filter((ca) => ca.uid === activeBackoffice);
+    product = productos[0];
+  }
+
+  const initialValues = activeBackoffice
+    ?{
+      name: product.name,
+      category: product.category,
+      img: product.img,
+      shortDescription: product.shortDescription,
+      description: product.description,
+      price: product.price,
+
+    }
+    :{
       name: "",
       category: "",
       img: "",
+      shortDescription: "",
       description: "",
       price: "",
-    },
+    };
+
+  const formik = useFormik({
+    initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, {resetForm}) => {
+      if(activeBackoffice){
+        
+      }else{
+        dispatch(postProductos(values));
+      }
     },
   });
 
@@ -53,6 +84,11 @@ const ProductForm = () => {
 
   return (
     <Container maxWidth={"sm"}>
+      <Typography variant="h5" align="center" mt={5} mb={5}>
+        {activeBackoffice
+          ? `Editar categoria ${product.name}`
+          : "Crear categoria"}
+      </Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -119,11 +155,35 @@ const ProductForm = () => {
           </Button>
         </label>
         <Box mt={1} />
-        <Box sx={{width:"100%"}}>
+        <Box sx={{ width: "100%" }}>
           {imagePreview && (
-            <img width={"100%"} src={URL.createObjectURL(imagePreview)} alt={"imgPreview"} />
+            <img
+              width={"100%"}
+              src={URL.createObjectURL(imagePreview)}
+              alt={"imgPreview"}
+            />
           )}
         </Box>
+        <Box mt={1} />
+        <TextField
+          fullWidth
+          id="shortDescription"
+          name="shortDescription"
+          label="shortDescription"
+          multiline
+          rows={3}
+          variant="outlined"
+          value={formik.values.shortDescription}
+          onChange={formik.handleChange}
+          error={
+            formik.touched.shortDescription &&
+            Boolean(formik.errors.shortDescription)
+          }
+          helperText={
+            formik.touched.shortDescription && formik.errors.shortDescription
+          }
+          margin="normal"
+        />
         <Box mt={1} />
         <TextField
           fullWidth
@@ -163,7 +223,7 @@ const ProductForm = () => {
           type="submit"
           m={"15"}
         >
-          Submit
+          {activeBackoffice ? "Guardar" : "Crear"}
         </Button>
       </form>
     </Container>

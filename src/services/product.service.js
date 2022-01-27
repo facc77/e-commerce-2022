@@ -19,8 +19,10 @@ export const postProducts = async (data) => {
   const resp = await fetchPrivate(endpoint, data, "POST");
   if (resp.ok) {
     datos.resp = await resp.json();
+    datos.error = null;
   } else {
-    datos.error = resp.statusText;
+    datos.error = await resp.json();
+    datos.resp = null;
   }
   return datos;
 };
@@ -29,8 +31,10 @@ export const putProducts = async (data, id) => {
   const resp = await fetchPrivate(endpoint, data, "PUT", id);
   if (resp.ok) {
     datos.resp = await resp.json();
+    datos.error = null;
   } else {
-    datos.error = resp.statusText;
+    datos.error = await resp.json();
+    datos.resp = null;
   }
   return datos;
 };
@@ -39,12 +43,13 @@ export const deleteProducts = async (id) => {
   const resp = await fetchPrivate(endpoint, null, "DELETE", id);
   if (resp.ok) {
     datos.resp = await resp.json();
+    datos.error = null;
   } else {
-    datos.error = resp.statusText;
+    datos.error = await resp.json();
+    datos.resp = null;
   }
   return datos;
 };
-
 
 export const getProductsByCategory = async (idCat) => {
   const resp = await fetchPublic(`/search/categories/${idCat}`);
