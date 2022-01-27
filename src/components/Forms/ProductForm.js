@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
 import * as yup from "yup";
+import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@mui/material/Container";
@@ -10,9 +11,11 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useDispatch, useSelector } from "react-redux";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
+import { toast } from "react-toastify";
 import { postProductos } from "../../redux/reducers/productsReducer";
 
 const validationSchema = yup.object({
@@ -20,7 +23,6 @@ const validationSchema = yup.object({
   category: yup
     .string("Selecciona la categoria")
     .required("Categoria requerida"),
-  img: yup.string("seleccione imagen").required("Imagen requerida"),
   shortDescription: yup
     .string("Escribe la descripcion corta")
     .required("shortDescription requerida"),
@@ -32,7 +34,8 @@ const validationSchema = yup.object({
 
 const ProductForm = () => {
   const dispatch = useDispatch();
-  const { productsList, activeBackoffice } = useSelector((state) => state.products);
+  const { productsList, activeBackoffice, error } = useSelector((state) => state.products);
+  const loadingP = useSelector((state) => state.products.loading);
   const { categoriasList, loading } = useSelector((state) => state.categories);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -81,6 +84,10 @@ const ProductForm = () => {
   const handleImages = () => {
     document.querySelector("#img").click();
   };
+
+  error && (toast.error(`${error}`, {
+    position: "bottom-left",
+  }));
 
   return (
     <Container maxWidth={"sm"}>
@@ -226,6 +233,12 @@ const ProductForm = () => {
           {activeBackoffice ? "Guardar" : "Crear"}
         </Button>
       </form>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadingP}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };
