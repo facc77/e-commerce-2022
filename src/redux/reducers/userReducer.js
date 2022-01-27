@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { successAlert } from "../../helpers/alert";
 import { deleteUsers, getUsers, postUsers, putUsers } from "../../services/user.service";
 
 
@@ -108,9 +109,12 @@ const userSlice = createSlice({
       state.loading = true;
     },
     [deleteUsuarios.fulfilled]: (state, action) => {
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.usuariosList = state.usuariosList.filter(fil => fil.uid !== action.payload.resp.user.uid));
+      if(action.payload.error){
+        (state.error = action.payload.error)
+      }else{
+        (state.usuariosList = state.usuariosList.filter(fil => fil.uid !== action.payload.resp.user.uid));
+        successAlert("","Usuario borrado");
+      }
       state.loading = false;
     },
     [deleteUsuarios.rejected]: (state, action) => {
