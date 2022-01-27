@@ -30,12 +30,9 @@ export const putCategorias = createAsyncThunk(
   "categorias/putCategorias",
   async (body) => {
     const { name, img, active } = body;
-    console.log(img);
     let resp;
     if (img.name) {
-      console.log(img.name);
       const urlImg = await imgUpload(img);
-      console.log(urlImg);
       resp = await putCategories({ name, img: urlImg }, active);
     } else {
       resp = await putCategories({ name, img }, active);

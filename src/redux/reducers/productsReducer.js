@@ -54,7 +54,7 @@ export const postProductos = createAsyncThunk(
       price,
       shortDescription,
       description,
-      img:urlImg,
+      img: urlImg,
     });
     return resp;
   }
@@ -63,14 +63,28 @@ export const postProductos = createAsyncThunk(
 export const putProductos = createAsyncThunk(
   "productos/putProductos",
   async (body) => {
-    const { name, category, price, description, img } = body;
-    const resp = await putProducts({
+    const {
       name,
       category,
       price,
       description,
+      shortDescription,
       img,
-    });
+      activeBackoffice,
+    } = body;
+    let resp;
+    if (img.name) {
+      const urlImg = imgUpload(img);
+      resp = await putProducts(
+        { name, category, price, description, shortDescription, img: urlImg },
+        activeBackoffice
+      );
+    } else {
+      resp = await putProducts(
+        { name, category, price, description, shortDescription, img },
+        activeBackoffice
+      );
+    }
     return resp;
   }
 );
@@ -199,10 +213,11 @@ const productsSlice = createSlice({
           ...state.productsList,
           action.payload.resp.product,
         ];
-        state.productsByCat = state.productsByCat.map(cat => {
-          if(cat.uid === action.payload.resp.product.category)
-          {cat.data = [...cat.data, action.payload.resp.product]} 
-           return cat 
+        state.productsByCat = state.productsByCat.map((cat) => {
+          if (cat.uid === action.payload.resp.product.category) {
+            cat.data = [...cat.data, action.payload.resp.product];
+          }
+          return cat;
         });
         state.error = null;
       }
@@ -218,11 +233,26 @@ const productsSlice = createSlice({
       state.loading = true;
     },
     [putProductos.fulfilled]: (state, action) => {
-      state.productsList = state.productsList.map((product) =>
-        product.uid === action.payload.resp.product.uid
-          ? action.payload.resp.product
-          : product
-      );
+      if (action.payload.error) {
+        state.error = action.payload.error.msg;
+      } else {
+        state.productsList = state.productsList.map((pro) =>
+          pro.uid === action.payload.resp.product.uid
+            ? action.payload.resp.product
+            : pro
+        );
+        state.productsByCat = state.productsByCat.map((cat) => {
+          if (cat.uid === action.payload.resp.product.category) {
+            cat.data = cat.data.map((pr) =>
+              pr.uid === action.payload.resp.product.uid
+                ? action.payload.resp.product
+                : pr
+            );
+          }
+          return cat;
+        });
+        state.error = null;
+      }
       state.loading = false;
     },
     [putProductos.rejected]: (state, action) => {
@@ -237,7 +267,7 @@ export const {
   resetCartOnLogOut,
   reduceCartProduct,
   deleteCartProduct,
-  setEditPro
+  setEditPro,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
