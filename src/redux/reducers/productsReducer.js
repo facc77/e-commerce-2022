@@ -5,9 +5,11 @@ import {
   getProductsByCategory,
   postProducts,
   putProducts,
+  deleteProducts,
 } from "../../services/product.service";
 import { toast } from "react-toastify";
 import { imgUpload } from "../../services/imgUpload";
+
 export const getProductos = createAsyncThunk(
   "productos/getProductos",
   async () => {
@@ -86,6 +88,13 @@ export const putProductos = createAsyncThunk(
       );
     }
     return resp;
+  }
+);
+
+export const deleteProductos = createAsyncThunk(
+  "productos/deleteProductos",
+  async (id) => {
+    return await deleteProducts(id);
   }
 );
 
@@ -256,6 +265,32 @@ const productsSlice = createSlice({
       state.loading = false;
     },
     [putProductos.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    //delete-----------------------------------------
+    [deleteProductos.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteProductos.fulfilled]: (state, action) => {
+      if (action.payload.error) {
+        state.error = action.payload.error;
+      } else {
+        state.productsList = state.productsList.filter(
+          (fil) => fil._id !== action.payload.resp.productoBorrado._id
+        );
+        state.productsByCat = state.productsByCat.map((ca) => {
+          if (ca.uid === action.payload.resp.productoBorrado.category) {
+            ca.data = ca.data.filter(
+              (pr) => pr._id !== action.payload.resp.productoBorrado._id
+            );
+          }
+          return ca;
+        });
+      }
+      state.loading = false;
+    },
+    [deleteProductos.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
     },

@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Skeleton from "@mui/material/Skeleton";
-import { setEditPro } from "../../redux/reducers/productsReducer";
+import { deleteProductos, setEditPro } from "../../redux/reducers/productsReducer";
 
 const ProductsBackoffice = () => {
   const { loading, productsByCat } = useSelector((state) => state.products);
@@ -28,6 +28,10 @@ const ProductsBackoffice = () => {
     dispatch(setEditPro(id));
     navigate("/backoffice/products/edit");
   };
+
+  const handleDelete = (id) => {
+    dispatch(deleteProductos(id));
+  }
 
   return (
     <Container maxWidth="sx">
@@ -108,7 +112,7 @@ const ProductsBackoffice = () => {
                           >
                             Edit
                           </Button>
-                          <Button color="error">Delete</Button>
+                          <Button color="error"  onClick={()=>handleDelete(prod._id)}>Delete</Button>
                         </ButtonGroup>
                       </TableCell>
                     </TableRow>
