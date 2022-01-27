@@ -23,6 +23,10 @@ const ProductsBackoffice = () => {
       dispatch(setEditPro(null));
       navigate("/backoffice/products/create");
   }
+  const handleEdit = (id) => {
+     dispatch(setEditPro(id));
+     navigate("/backoffice/products/edit");
+  }
  
  return (
   <Container maxWidth="sx">
@@ -88,7 +92,7 @@ const ProductsBackoffice = () => {
                         </TableCell>
                         <TableCell align="right">
                           <ButtonGroup size="small" aria-label="small button group">
-                            <Button color="warning">Edit</Button>
+                            <Button color="warning" onClick={()=>handleEdit(prod._id)}>Edit</Button>
                             <Button color="error">Delete</Button>
                           </ButtonGroup>
                         </TableCell>

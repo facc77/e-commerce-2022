@@ -237,14 +237,14 @@ const productsSlice = createSlice({
         state.error = action.payload.error.msg;
       } else {
         state.productsList = state.productsList.map((pro) =>
-          pro.uid === action.payload.resp.product.uid
+          pro._id === action.payload.resp.product._id
             ? action.payload.resp.product
             : pro
         );
         state.productsByCat = state.productsByCat.map((cat) => {
           if (cat.uid === action.payload.resp.product.category) {
             cat.data = cat.data.map((pr) =>
-              pr.uid === action.payload.resp.product.uid
+              pr._id === action.payload.resp.product._id
                 ? action.payload.resp.product
                 : pr
             );

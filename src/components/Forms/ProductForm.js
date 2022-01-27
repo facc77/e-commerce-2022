@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { toast } from "react-toastify";
-import { postProductos } from "../../redux/reducers/productsReducer";
+import { postProductos, putProductos } from "../../redux/reducers/productsReducer";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
   name: yup.string("Escribe el nombre").required("Nombre requerido"),
@@ -38,18 +39,33 @@ const ProductForm = () => {
   const loadingP = useSelector((state) => state.products.loading);
   const { categoriasList, loading } = useSelector((state) => state.categories);
   const [imagePreview, setImagePreview] = useState("");
+  const [ok, setOk] = useState(false);
+  let navigate = useNavigate();
 
   let product = {};
 
   if (activeBackoffice) {
-    const productos = productsList.filter((ca) => ca.uid === activeBackoffice);
+    const productos = productsList.filter((ca) => ca._id === activeBackoffice);
     product = productos[0];
   }
+
+  useEffect(() => {
+    if((loadingP === false) && (error === null) && (ok)){
+      toast.success(activeBackoffice ? "Producto actualizado!" : " Producto creado!",{position:"bottom-left"})
+      navigate("/backoffice/products");
+    }
+    if((loadingP === false) && error){
+      toast.error(`${error}`, {
+        position: "bottom-left",
+      })
+    }
+  }, [activeBackoffice, error, loadingP, navigate, ok]);
+  
 
   const initialValues = activeBackoffice
     ?{
       name: product.name,
-      category: product.category,
+      category: product.category._id,
       img: product.img,
       shortDescription: product.shortDescription,
       description: product.description,
@@ -70,9 +86,11 @@ const ProductForm = () => {
     validationSchema: validationSchema,
     onSubmit: (values, {resetForm}) => {
       if(activeBackoffice){
-        
+        dispatch(putProductos({...values, activeBackoffice}));
+        setOk(true);
       }else{
         dispatch(postProductos(values));
+        setOk(true);
       }
     },
   });
@@ -85,16 +103,12 @@ const ProductForm = () => {
     document.querySelector("#img").click();
   };
 
-  error && (toast.error(`${error}`, {
-    position: "bottom-left",
-  }));
-
   return (
     <Container maxWidth={"sm"}>
       <Typography variant="h5" align="center" mt={5} mb={5}>
         {activeBackoffice
-          ? `Editar categoria ${product.name}`
-          : "Crear categoria"}
+          ? `Editar producto ${product.name}`
+          : "Crear producto"}
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -170,6 +184,9 @@ const ProductForm = () => {
               alt={"imgPreview"}
             />
           )}
+          {
+          (activeBackoffice && product.img) && <img width={"100%"} src={product.img} alt={product.name} />
+          }
         </Box>
         <Box mt={1} />
         <TextField
