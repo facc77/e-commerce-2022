@@ -14,6 +14,9 @@ import { useDispatch } from "react-redux";
 import { deleteUsuarios, setEdit } from "../../redux/reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import { questionAlert, successAlert } from "../../helpers/alert";
 
 const UsersBackoffice = () => {
   const { usuariosList, loading } = useSelector((state) => state.users);
@@ -29,12 +32,18 @@ const UsersBackoffice = () => {
     navigate("/backoffice/users/create");
   };
   const handleDelete = (id) => {
-    dispatch(deleteUsuarios(id));
-  }
+    questionAlert("estás seguro de eliminar este usuario?").then((resp) => {
+      if (resp) {
+        dispatch(deleteUsuarios(id));
+      } else {
+        successAlert("", "Cancelado");
+      }
+    });
+  };
 
   return (
     <Container maxWidth="sx">
-      <Typography component={'span'} variant="h4" align="center" mt={5} mb={5}>
+      <Typography variant="h4" align="center" mt={5} mb={5}>
         Usuarios
       </Typography>
       <Button
@@ -75,20 +84,30 @@ const UsersBackoffice = () => {
                       >
                         Edit
                       </Button>
-                      <Button 
-                         color="error"
-                         onClick={()=> handleDelete(row.uid)}
-                         >Delete</Button>
+                      <Button
+                        color="error"
+                        onClick={() => handleDelete(row.uid)}
+                      >
+                        Delete
+                      </Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
-              <TableRow><TableCell colSpan={4}>Generando lista...</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={4}>Generando lista...</TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Container>
   );
 };

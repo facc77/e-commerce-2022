@@ -5,8 +5,12 @@ import {
   getProductsByCategory,
   postProducts,
   putProducts,
+  deleteProducts,
 } from "../../services/product.service";
 import { toast } from "react-toastify";
+import { imgUpload } from "../../services/imgUpload";
+import { successAlert } from "../../helpers/alert";
+
 export const getProductos = createAsyncThunk(
   "productos/getProductos",
   async () => {
@@ -17,15 +21,24 @@ export const getProductosPorCategoria = createAsyncThunk(
   "productos/getProductosByCategory",
   async () => {
     const categoriesList = await getCategories();
-    async function pro(){
+    async function pro() {
       let products = [];
       for (let i = 0; i < categoriesList.resp.data.length; i++) {
-        const productsData = await getProductsByCategory(categoriesList.resp.data[i].uid);
-        products = [{name:categoriesList.resp.data[i].name, data:productsData.resp.results}, ...products];
+        const productsData = await getProductsByCategory(
+          categoriesList.resp.data[i].uid
+        );
+        products = [
+          {
+            name: categoriesList.resp.data[i].name,
+            uid: categoriesList.resp.data[i].uid,
+            data: productsData.resp.results,
+          },
+          ...products,
+        ];
       }
       return products;
-    }  
-    
+    }
+
     return await pro();
   }
 );
@@ -33,13 +46,18 @@ export const getProductosPorCategoria = createAsyncThunk(
 export const postProductos = createAsyncThunk(
   "productos/postProductos",
   async (body) => {
-    const { name, category, price, description, img } = body;
+    const { name, category, price, description, shortDescription, img } = body;
+    let urlImg = "";
+    if (img) {
+      urlImg = await imgUpload(img);
+    }
     const resp = await postProducts({
       name,
       category,
       price,
+      shortDescription,
       description,
-      img,
+      img: urlImg,
     });
     return resp;
   }
@@ -48,15 +66,36 @@ export const postProductos = createAsyncThunk(
 export const putProductos = createAsyncThunk(
   "productos/putProductos",
   async (body) => {
-    const { name, category, price, description, img } = body;
-    const resp = await putProducts({
+    const {
       name,
       category,
       price,
       description,
+      shortDescription,
       img,
-    });
+      activeBackoffice,
+    } = body;
+    let resp;
+    if (img.name) {
+      const urlImg = imgUpload(img);
+      resp = await putProducts(
+        { name, category, price, description, shortDescription, img: urlImg },
+        activeBackoffice
+      );
+    } else {
+      resp = await putProducts(
+        { name, category, price, description, shortDescription, img },
+        activeBackoffice
+      );
+    }
     return resp;
+  }
+);
+
+export const deleteProductos = createAsyncThunk(
+  "productos/deleteProductos",
+  async (id) => {
+    return await deleteProducts(id);
   }
 );
 
@@ -64,10 +103,11 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     productsList: [],
-    productsByCat:[],
+    productsByCat: [],
     cart: [],
     loading: false,
     active: null,
+    activeBackoffice: null,
     error: null,
   },
   reducers: {
@@ -141,6 +181,11 @@ const productsSlice = createSlice({
         position: "bottom-left",
       });
     },
+    setEditPro(state, action) {
+      action.payload
+        ? (state.activeBackoffice = action.payload)
+        : (state.activeBackoffice = null);
+    },
   },
   extraReducers: {
     [getProductos.pending]: (state, action) => {
@@ -171,12 +216,21 @@ const productsSlice = createSlice({
       state.loading = true;
     },
     [postProductos.fulfilled]: (state, action) => {
-      action.payload.error
-        ? (state.error = action.payload.error)
-        : (state.productsList = [
-            ...state.productsList,
-            action.payload.resp.category,
-          ]);
+      if (action.payload.error) {
+        state.error = action.payload.error.msg;
+      } else {
+        state.productsList = [
+          ...state.productsList,
+          action.payload.resp.product,
+        ];
+        state.productsByCat = state.productsByCat.map((cat) => {
+          if (cat.uid === action.payload.resp.product.category) {
+            cat.data = [...cat.data, action.payload.resp.product];
+          }
+          return cat;
+        });
+        state.error = null;
+      }
       state.loading = false;
     },
     [postProductos.rejected]: (state, action) => {
@@ -189,14 +243,56 @@ const productsSlice = createSlice({
       state.loading = true;
     },
     [putProductos.fulfilled]: (state, action) => {
-      state.productsList = state.productsList.map((product) =>
-        product.uid === action.payload.resp.product.uid
-          ? action.payload.resp.product
-          : product
-      );
+      if (action.payload.error) {
+        state.error = action.payload.error.msg;
+      } else {
+        state.productsList = state.productsList.map((pro) =>
+          pro._id === action.payload.resp.product._id
+            ? action.payload.resp.product
+            : pro
+        );
+        state.productsByCat = state.productsByCat.map((cat) => {
+          if (cat.uid === action.payload.resp.product.category) {
+            cat.data = cat.data.map((pr) =>
+              pr._id === action.payload.resp.product._id
+                ? action.payload.resp.product
+                : pr
+            );
+          }
+          return cat;
+        });
+        state.error = null;
+      }
       state.loading = false;
     },
     [putProductos.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    //delete-----------------------------------------
+    [deleteProductos.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteProductos.fulfilled]: (state, action) => {
+      if (action.payload.error) {
+        state.error = action.payload.error;
+      } else {
+        state.productsList = state.productsList.filter(
+          (fil) => fil._id !== action.payload.resp.productoBorrado._id
+        );
+        state.productsByCat = state.productsByCat.map((ca) => {
+          if (ca.uid === action.payload.resp.productoBorrado.category) {
+            ca.data = ca.data.filter(
+              (pr) => pr._id !== action.payload.resp.productoBorrado._id
+            );
+          }
+          return ca;
+        });
+        successAlert("","Producto borrado");
+      }
+      state.loading = false;
+    },
+    [deleteProductos.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
     },
@@ -208,6 +304,7 @@ export const {
   resetCartOnLogOut,
   reduceCartProduct,
   deleteCartProduct,
+  setEditPro,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
