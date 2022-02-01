@@ -11,6 +11,7 @@ import AuthRoute from "./AuthRoute";
 import NavBar from "../components/Navbar/NavBar";
 import DownNavBar from "../components/Navbar/DownNavBar";
 import Footer from "../components/Footer";
+import ProtectAuth from "./ProtectAuth";
 
 const PublicRoute = () => {
   return (
@@ -21,7 +22,14 @@ const PublicRoute = () => {
         <Routes>
           <Route path="*" element={<NotFoundScreen />} />
           <Route path="nosotros" element={<NosotroScreen />} />
-          <Route path="auth/*" element={<AuthRoute />} />
+          <Route
+            path="auth/*"
+            element={
+              <ProtectAuth>
+                <AuthRoute />
+              </ProtectAuth>
+            }
+          />
 
           <Route path="/" element={<HomeScreen />} />
           <Route path="/contacto" element={<ContactScreen />} />
