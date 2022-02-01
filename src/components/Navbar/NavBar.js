@@ -9,18 +9,26 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MailIcon from "@mui/icons-material/Mail";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import { Badge, Button, ButtonGroup } from "@mui/material";
+import {
+  Badge,
+  Button,
+  ButtonGroup,
+  Divider,
+  ListItemIcon,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../../redux/reducers/authReducer";
 import { resetCartOnLogOut } from "../../redux/reducers/productsReducer";
-const settings = ["Backoffice", "Logout"];
+import { Logout } from "@mui/icons-material";
 const NavBar = () => {
+  const navigate = useNavigate();
   const { logged, user } = useSelector((state) => state.auth);
   const ProductsCart = useSelector((state) => state.products.cart);
   const dispatch = useDispatch();
@@ -44,12 +52,15 @@ const NavBar = () => {
     setAnchorCart(null);
   };
 
-  const handleClick = (e) => {
-    if (e.target.textContent === "Logout") {
+  const handleLogout = (e) => {
       dispatch(setLogout());
       dispatch(resetCartOnLogOut());
-    }
   };
+
+  const handleBackoffice = () => {
+     navigate("/backoffice");
+     
+  }
 
   return (
     <AppBar position="static">
@@ -227,11 +238,16 @@ const NavBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={(e) => handleClick(e)}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleBackoffice}>
+                  <AdminPanelSettingsIcon /> Backoffice
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
               </Menu>
             </Box>
           ) : (
