@@ -34,6 +34,23 @@ const HorizontalCard = ({ product }) => {
           position: "bottom-left",
         });
   };
+
+  console.log(window.screen.width);
+
+  function fold(input, lineSize, lineArray) {
+    lineArray = lineArray || [];
+    if (input.length <= lineSize) {
+      lineArray.push(input);
+      return lineArray;
+    }
+    lineArray.push(input.substring(0, lineSize));
+    var tail = input.substring(lineSize);
+    return fold(tail, lineSize, lineArray);
+  }
+
+  var arrayOfLines = fold(product.name, 15);
+  var foldedString = arrayOfLines.join("<br/>");
+
   return (
     <>
       <Box
@@ -79,6 +96,9 @@ const HorizontalCard = ({ product }) => {
                   fontFamily: "Josefin Sans",
                   fontSize: "20px",
                   color: "#111C85",
+                  width: { xs: "10rem", md: "100%" },
+                  display: { xs: "inline-block" },
+                  whiteSpace: { xs: "pre-line" },
                 }}
               >
                 {product.name}

@@ -8,6 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,7 +27,7 @@ export default function BasicTable() {
 
   return cartProducts.length > 0 ? (
     <TableContainer sx={{ border: 0, boxShadow: "none" }} component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table /* sx={{ minWidth: 150 }} */ aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontFamily: "Josefin Sans" }}>Producto</TableCell>
@@ -48,13 +49,18 @@ export default function BasicTable() {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <Box sx={{ height: "80px", width: "80px" }}>
+                <Box
+                  sx={{
+                    height: { xs: "60px", md: "80px" },
+                    width: { xs: "60px", md: "80px" },
+                  }}
+                >
                   <Image src={product.img} />
                   <CancelIcon
                     onClick={() => dispatch(deleteCartProduct(product))}
                     sx={{
                       position: "relative",
-                      bottom: " 5rem",
+                      bottom: { xs: "4rem", md: "5rem" },
                       left: "5rem",
                       color: "#FF0000",
                       "&:hover": {
@@ -82,12 +88,26 @@ export default function BasicTable() {
               </TableCell>
               <TableCell align="right">
                 <Button
-                  sx={{ padding: "0rem" }}
+                  padding="0rem"
+                  sx={{ padding: "0.5rem" }}
                   onClick={() => dispatch(setAddProduct(product))}
                 >
                   +
                 </Button>
-                {product.count}
+
+                <Box sx={{ position: { xs: "relative", md: "static" } }}>
+                  <Typography
+                    /* component={Typography} */
+                    sx={{
+                      position: { xs: "absolute", md: "static" },
+                      bottom: { xs: "-1rem", md: 0 },
+                      left: { xs: "2.5rem", md: 0 },
+                    }}
+                  >
+                    {product.count}
+                  </Typography>
+                </Box>
+
                 <Button
                   padding="0rem"
                   sx={{ padding: "0.5rem" }}

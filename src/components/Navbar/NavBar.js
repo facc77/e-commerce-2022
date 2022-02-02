@@ -196,6 +196,7 @@ const NavBar = () => {
                   sx={{
                     fontFamily: "Lato",
                     padding: "0.25rem",
+                    marginX: "0.5rem",
                   }}
                 >
                   No hay productos

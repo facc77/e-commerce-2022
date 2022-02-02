@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -88,6 +88,7 @@ const categories = [
 ];
 
 const ResponsiveAppBar = () => {
+  let navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -111,6 +112,14 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const [search, setSearch] = useState("");
+  console.log(search);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/busqueda/${search}`);
   };
 
   return (
@@ -323,6 +332,8 @@ const ResponsiveAppBar = () => {
                   display: "flex",
                   margin: { xs: "0" },
                 }}
+                component="form"
+                onSubmit={(e) => handleSearch(e)}
               >
                 <Search>
                   <SearchIconWrapper>
@@ -331,12 +342,14 @@ const ResponsiveAppBar = () => {
                         backgroundColor: "#FB2E86",
                         padding: "8px",
                       }}
+                      type="submit"
                     />
                   </SearchIconWrapper>
                   <StyledInputBase
                     sx={{ color: "#0D0E43", display: "flex", ml: "20px" }}
                     placeholder="Buscar…"
                     inputProps={{ "aria-label": "search" }}
+                    onChange={(event) => setSearch(event.target.value)}
                   />
                 </Search>
               </Box>

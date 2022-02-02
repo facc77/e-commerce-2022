@@ -8,6 +8,9 @@ import CartScreen from "../pages/public/CartScreen";
 import ProductsScreen from "../pages/public/ProductsScreen";
 import ProductDetailScreen from "../pages/public/ProductDetailScreen";
 import SearchScreen from "../pages/public/SearchScreen";
+import SuccessScreen from "../pages/public/SuccessScreen";
+import CancelScreen from "../pages/public/CancelScreen";
+import CheckoutScreen from "../pages/public/CheckoutScreen";
 import AuthRoute from "./AuthRoute";
 import NavBar from "../components/Navbar/NavBar";
 import DownNavBar from "../components/Navbar/DownNavBar";
@@ -33,6 +36,9 @@ const PublicRoute = () => {
             element={<ProductDetailScreen />}
           />
           <Route path="/busqueda/:busqueda" element={<SearchScreen />} />
+          <Route path="/checkout" element={<CheckoutScreen />} />
+          <Route path="/checkout/success" element={<SuccessScreen />} />
+          <Route path="/checkout/cancel" element={<CancelScreen />} />
         </Routes>
       </div>
       <Footer />

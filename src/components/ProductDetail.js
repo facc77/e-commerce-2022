@@ -36,11 +36,20 @@ const ProductDetail = ({ product }) => {
         sx={{
           height: "500px",
           display: "flex",
+          flex: "flex-wrap",
           alignItems: "center",
-          width: "60%",
+          width: { xs: "90%", md: "65%" },
+          justifyContent: { xs: "center" },
         }}
       >
-        <Grid item sx={{ height: "500px", width: "35%" }}>
+        <Grid
+          item
+          sx={{
+            height: { xs: "100px", md: "500px" },
+            width: "35%",
+            minWidth: "200px",
+          }}
+        >
           <Image
             imageStyle={{
               height: "100%",
@@ -50,7 +59,14 @@ const ProductDetail = ({ product }) => {
             alt="image"
           />
         </Grid>
-        <Grid item sx={{ height: "500px", width: "65%" }}>
+        <Grid
+          item
+          sx={{
+            height: { xs: "100px", md: "500px" },
+            width: { xs: "90%", md: "65%" },
+            mb: { xs: "6rem" },
+          }}
+        >
           <Typography
             fontFamily="Josefin Sans"
             component="h1"

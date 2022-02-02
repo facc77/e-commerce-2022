@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {startRegister} from "../../redux/reducers/authReducer";
+import { startRegister } from "../../redux/reducers/authReducer";
 import "../../styles/LoginForm.css";
 
 const theme = createTheme({
@@ -63,7 +63,7 @@ const RegisterForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const  {passwordConfirm, ...rest} = values;
+      const { passwordConfirm, ...rest } = values;
       dispatch(startRegister(rest));
     },
   });
@@ -73,7 +73,7 @@ const RegisterForm = () => {
       <Container
         component="main"
         maxWidth="xs"
-        sx={{ boxShadow: 1, borderRadius: 2, marginY: "5rem" }}
+        sx={{ boxShadow: 1, borderRadius: 2, marginY: "5rem", width: "90%" }}
       >
         <Box
           sx={{
@@ -101,91 +101,96 @@ const RegisterForm = () => {
           </Typography>
         </Box>
 
-        <Box
-          component="form"
-          onSubmit={formik.handleSubmit}
-          noValidate
-          sx={{
-            mt: 1,
-            width: 400,
-            height: 420,
-            padding: 0,
-          }}
-        >
-          <Box margin={4}>
-            <TextField
-              sx={{ color: "#9096B2" }}
-              fullWidth
-              id="email"
-              name="email"
-              label="Email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-            />
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{
+              mt: 1,
+              width: { xs: "95%" },
+              height: 460,
+              padding: 0,
+            }}
+          >
+            <Box margin={4}>
+              <TextField
+                sx={{ color: "#9096B2" }}
+                fullWidth
+                id="email"
+                name="email"
+                label="Email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+              />
+            </Box>
+            <Box margin={4}>
+              <TextField
+                sx={{ color: "#9096B2" }}
+                fullWidth
+                id="name"
+                name="name"
+                label="Nombre"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+            </Box>
+            <Box margin={4}>
+              <TextField
+                sx={{ color: "#9096B2" }}
+                fullWidth
+                id="password"
+                name="password"
+                label="Contrasena"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+              />
+            </Box>
+            <Box margin={4}>
+              <TextField
+                sx={{ color: "#9096B2" }}
+                fullWidth
+                id="passwordConfirm"
+                name="passwordConfirm"
+                label="Repetir Contrasena"
+                type="password"
+                value={formik.values.passwordConfirm}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.passwordConfirm &&
+                  Boolean(formik.errors.passwordConfirm)
+                }
+                helperText={
+                  formik.touched.passwordConfirm &&
+                  formik.errors.passwordConfirm
+                }
+              />
+            </Box>
+            <ThemeProvider theme={theme}>
+              <Button
+                fontFamily="Lato"
+                font-weight="bold"
+                font-size="27px"
+                color="neutral"
+                variant="contained"
+                fullWidth
+                type="submit"
+                margin="2"
+                sx={{ textTransform: "capitalize", fontSize: "17px" }}
+              >
+                Enviar
+              </Button>
+            </ThemeProvider>
           </Box>
-          <Box margin={4}>
-            <TextField
-              sx={{ color: "#9096B2" }}
-              fullWidth
-              id="name"
-              name="name"
-              label="Nombre"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-            />
-          </Box>
-          <Box margin={4}>
-            <TextField
-              sx={{ color: "#9096B2" }}
-              fullWidth
-              id="password"
-              name="password"
-              label="Contrasena"
-              type="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-            />
-          </Box>
-          <Box margin={4}>
-            <TextField
-              sx={{ color: "#9096B2" }}
-              fullWidth
-              id="passwordConfirm"
-              name="passwordConfirm"
-              label="Repetir Contrasena"
-              type="password"
-              value={formik.values.passwordConfirm}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.passwordConfirm &&
-                Boolean(formik.errors.passwordConfirm)
-              }
-              helperText={
-                formik.touched.passwordConfirm && formik.errors.passwordConfirm
-              }
-            />
-          </Box>
-          <ThemeProvider theme={theme}>
-            <Button
-              fontFamily="Lato"
-              font-weight="bold"
-              font-size="27px"
-              color="neutral"
-              variant="contained"
-              fullWidth
-              type="submit"
-              margin="2"
-              sx={{ textTransform: "capitalize", fontSize: "17px" }}
-            >
-              Enviar
-            </Button>
-          </ThemeProvider>
         </Box>
       </Container>
     </div>

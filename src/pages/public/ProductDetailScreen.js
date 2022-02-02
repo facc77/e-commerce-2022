@@ -36,7 +36,7 @@ const ProductDetailScreen = () => {
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          marginTop: "6rem",
+          marginTop: { xs: "2rem", md: "6rem" },
         }}
       >
         <ProductDetail product={productData} />
@@ -44,12 +44,12 @@ const ProductDetailScreen = () => {
       <Box
         sx={{
           display: "flex",
-          mt: "3rem",
+          mt: { xs: "9rem", md: "6rem" },
           justifyContent: "center",
-          my: "3rem",
+          mb: "3rem",
         }}
       >
-        <Typography sx={{ fontSize: "32px", fontFamily: "Josefin Sans" }}>
+        <Typography sx={{ fontSize: "1.8rem", fontFamily: "Josefin Sans" }}>
           Productos Relacionados
         </Typography>
       </Box>
