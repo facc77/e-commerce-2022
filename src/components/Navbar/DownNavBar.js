@@ -78,7 +78,7 @@ const theme = createTheme({
   },
 });
 
-const pages = ["home", "productos", "compras", "contacto"];
+const pages = ["home", "contacto"];
 const categories = [
   "Televisores",
   "Laptops & Computadoras",
