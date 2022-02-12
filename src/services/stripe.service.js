@@ -1,5 +1,4 @@
 import { fetchPrivate } from "./fetch-private";
-import { fetchPublic } from "./fetch-public";
 
 const endpoint = process.env.REACT_APP_ENDPOINT_Stripe || "/order";
 

@@ -66,7 +66,7 @@ const FormPayment = () => {
         .then(async () => {
           const id = localStorage.getItem("uid");
           const resp = await putOrder("/order/confirm", null, id);
-          console.log("dinerito, dinerito");
+          console.log("dinerito, dinerito", resp);
           dispatch(resetCartOnLogOut());
           navigate("/checkout/success");
         })
