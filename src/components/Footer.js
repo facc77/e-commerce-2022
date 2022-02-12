@@ -10,15 +10,11 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
-  const categories = [
-    "Laptops & Computadoras",
-    "Camaras & Fotografía",
-    "Smart Phones & Tablets",
-    "Video Juegos & Consolas",
-    "Audio & Sonido",
-  ];
+  const categories1 = useSelector((state) => state.categories.categoriasList);
+  let categoryNames = categories1.map((a) => a.name.toLowerCase());
 
   return (
     <>
@@ -74,13 +70,17 @@ const Footer = () => {
                   </Typography>
                 </ListItem>
 
-                {categories.map((categorie) => (
+                {categoryNames.map((categorie) => (
                   <ListItem
                     key={categorie}
                     disablePadding
                     sx={{ justifyContent: "center" }}
                   >
-                    <MenuItem component={Link} to="/login" sx={{ padding: 0 }}>
+                    <MenuItem
+                      component={Link}
+                      to={`/productos/${categorie}`}
+                      sx={{ padding: 0 }}
+                    >
                       <Button
                         sx={{ color: "#8A8FB9", textTransform: "capitalize" }}
                       >
