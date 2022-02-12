@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -53,14 +53,13 @@ const NavBar = () => {
   };
 
   const handleLogout = (e) => {
-      dispatch(setLogout());
-      dispatch(resetCartOnLogOut());
+    dispatch(setLogout());
+    dispatch(resetCartOnLogOut());
   };
 
   const handleBackoffice = () => {
-     navigate("/backoffice");
-     
-  }
+    navigate("/backoffice");
+  };
 
   return (
     <AppBar position="static">
@@ -150,7 +149,7 @@ const NavBar = () => {
               onClose={handleCloseCartMenu}
             >
               {ProductsCart.length !== 0 ? (
-                <>
+                <Box>
                   {ProductsCart.map((product) => (
                     <MenuItem
                       key={product}
@@ -201,7 +200,7 @@ const NavBar = () => {
                       Ver todo el carrito
                     </Typography>
                   </MenuItem>
-                </>
+                </Box>
               ) : (
                 <Typography
                   sx={{
@@ -218,7 +217,7 @@ const NavBar = () => {
 
           {logged ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Abrir opciones">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={user.name} src={user.img} />
                 </IconButton>

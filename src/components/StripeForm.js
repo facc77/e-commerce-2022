@@ -1,115 +1,201 @@
-import React, { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  useStripe,
+  useElements,
+  CardCvcElement,
+  CardExpiryElement,
+  CardNumberElement,
+} from "@stripe/react-stripe-js";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import {
+  StripeTextFieldCVC,
+  StripeTextFieldExpiry,
+  StripeTextFieldNumber,
+} from "../components/CommonTextField";
+import { getOrder, putOrder } from "../services/stripe.service.js";
+import { resetCartOnLogOut } from "../redux/reducers/productsReducer";
 
-let stripePromise;
+const FormPayment = () => {
+  const [order, setOrder] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const activeUser = useSelector((state) => state.auth.user.name);
+  const stripe = useStripe();
+  const elements = useElements();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-const getStripe = () => {
-  if (!stripePromise) {
-    stripePromise = loadStripe(
-      "pk_test_51KMGSvD2oePE5Ls1FOKrZWSCMC57ahMvUc7rgw4g7i1z25hS8aLUo0VrKbSlp6otfISbc9PH3YKLvFjfF51fgBxe00GLeFCgIs"
-    );
-  }
-  return stripePromise;
-};
-
-const StripeForm = () => {
-  const [stripeError, setStripeError] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-
-  const cartProducts = useSelector((state) => state.products.cart);
-
-  let TotalPrice = cartProducts.reduce(function (prev, cur) {
-    return prev + cur.price * cur.count;
-  }, 0);
-
-  const item = [
-    { price: "price_1KNMRSD2oePE5Ls16AfRTzVX", quantity: 4 },
-    { price: "price_1KNNUBD2oePE5Ls1xres4toQ", quantity: 4 },
-  ];
-  console.log(item);
-
-  const checkoutOptions = {
-    lineItems: item,
-    mode: "payment",
-    successUrl: "http://localhost:3000/checkout/success",
-    cancelUrl: "http://localhost:3000/checkout/cancel",
-  };
-
-  const redirectToCheckout = async () => {
+  //TODO: order de la base de datos
+  useEffect(() => {
     setLoading(true);
-    console.log("redirectToCheckout");
-    const stripe1 = await getStripe();
-    console.log(stripe1);
-    const { error } = await stripe1.redirectToCheckout(checkoutOptions);
-    console.log("Stripe checkout error", error);
-    if (error) setStripeError(error.message);
-    setLoading(false);
+    const id = localStorage.getItem("uid");
+    const getData = async () => {
+      const resp = await getOrder(id);
+      setOrder(resp.resp.data);
+      setLoading(false);
+    };
+    getData();
+  }, []);
+
+  // TODO: submit del formulario, Crear metodo de pago
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitLoading(true);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(
+        CardCvcElement,
+        CardExpiryElement,
+        CardNumberElement
+      ),
+    });
+
+    if (!error) {
+      const id = localStorage.getItem("uid");
+      const crearPago = await putOrder(
+        "/order",
+        { token: paymentMethod.id },
+
+        id
+      );
+      stripe
+        .confirmCardPayment(crearPago.resp.data.client_secret)
+        .then(async () => {
+          const id = localStorage.getItem("uid");
+          const resp = await putOrder("/order/confirm", null, id);
+          console.log("dinerito, dinerito");
+          dispatch(resetCartOnLogOut());
+          navigate("/checkout/success");
+        })
+        .catch();
+    } else {
+      console.log(error);
+    }
   };
 
-  if (stripeError) alert(stripeError);
+  const [state, setState] = React.useState({
+    cardNumberComplete: false,
+    expiredComplete: false,
+    cvcComplete: false,
+    cardNumberError: null,
+    expiredError: null,
+    cvcError: null,
+  });
+
+  const onElementChange =
+    (field, errorField) =>
+    ({ complete, error = { message: null } }) => {
+      setState({ ...state, [field]: complete, [errorField]: error.message });
+    };
+
+  const { cardNumberError, expiredError, cvcError } = state;
+
+  if (loading) {
+    return <div>generando formulario de pago...</div>;
+  }
 
   return (
-    <Box
-      component="form"
-      sx={{ display: { xs: "flex" }, justifyContent: { xs: "center" } }}
+    <Container
+      maxWidth="md"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        boxShadow: 1,
+        borderRadius: 2,
+        width: "40%",
+      }}
     >
       <Box
         sx={{
-          width: { xs: "80%", md: "40%" },
-          marginLeft: { xs: "0rem", md: "2rem" },
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          md: { padding: 1 },
+          width: { md: "80%", xs: "100%" },
+          marginTop: 5,
         }}
       >
-        <Box
-          sx={{
-            boxShadow: 1,
-            padding: "3rem",
-            borderRadius: "7px",
-            width: "15rem",
-            backgroundColor: "#F4F4FC",
-          }}
-        >
-          <Box
+        <Typography variant="h3" align="center" fontFamily="Lato">
+          Hola {activeUser}
+        </Typography>
+        <Typography variant="h6" align="center" fontFamily="Lato">
+          📌 A continuación debes de introducir los datos de tu tarjeta para
+          procesar el pago! El pago se procesara mediante la plataforma de
+          stripe
+        </Typography>
+        <Box mt={3} />
+        <Box component="form" onSubmit={handleSubmit} mb={4}>
+          <TextField
+            fullWidth
+            id="name"
+            name="name"
+            label="name"
+            autoComplete="off"
+            value={activeUser}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <Box mt={4} />
+          <TextField
+            fullWidth
+            id="amount"
+            name="amount"
+            label="amount"
+            autoComplete="off"
+            value={order.amount}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <Box mt={4} />
+          <StripeTextFieldNumber
+            stripeElement={CardNumberElement}
+            error={Boolean(cardNumberError)}
+            fullWidth
+            required
+            labelErrorMessage={cardNumberError}
+            onChange={onElementChange("cardNumberComplete", "cardNumberError")}
+          />
+          <Box mt={4} />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <StripeTextFieldExpiry
+                stripeElement={CardExpiryElement}
+                error={Boolean(expiredError)}
+                required
+                labelErrorMessage={expiredError}
+                onChange={onElementChange("expiredComplete", "expiredError")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <StripeTextFieldCVC
+                stripeElement={CardCvcElement}
+                error={Boolean(cvcError)}
+                required
+                labelErrorMessage={cvcError}
+                onChange={onElementChange("cvcComplete", "cvcError")}
+              />
+            </Grid>
+          </Grid>
+          <Box mt={6.5} pt={6.5} />
+          <Button
+            variant="contained"
+            fullWidth
+            type="submit"
             sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              borderBottom: "1px #D3D3D3 solid",
+              backgroundColor: "#FB2E86",
+              "&:hover": {
+                backgroundColor: "#FB2E86",
+              },
             }}
           >
-            <Typography>Total a pagar:</Typography>
-            <Typography>${TotalPrice}</Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="success"
-              sx={{
-                backgroundColor: "#19D16F",
-                padding: "0.75rem",
-                marginTop: "1.5rem",
-              }}
-              onClick={redirectToCheckout}
-              disabled={isLoading}
-            >
-              Ir a checkout
-            </Button>
-          </Box>
+            {submitLoading ? "Aguarde un momento..." : "Pagar"}
+          </Button>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 
-export default StripeForm;
+export default FormPayment;

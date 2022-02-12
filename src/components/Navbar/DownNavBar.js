@@ -94,7 +94,6 @@ const ResponsiveAppBar = () => {
 
   const dispatch = useDispatch();
   const callDispatch = (name) => {
-    console.log(name);
     dispatch(setEditCate(name));
   };
 
@@ -115,7 +114,6 @@ const ResponsiveAppBar = () => {
   };
 
   const [search, setSearch] = useState("");
-  console.log(search);
 
   const handleSearch = (e) => {
     e.preventDefault();

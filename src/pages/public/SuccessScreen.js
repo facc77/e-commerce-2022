@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SectionBar from "../../components/SectionBar";
 import Box from "@mui/material/Box";
 import Image from "material-ui-image";
@@ -6,8 +6,21 @@ import Success from "../../img/success.png";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { getOrder } from "../../services/stripe.service.js";
 
 const SuccessScreen = () => {
+  const [order, setOrder] = useState("");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const id = localStorage.getItem("uid");
+    const getData = async () => {
+      const resp = await getOrder(id);
+      setOrder(resp.resp.data);
+    };
+    getData();
+  }, []);
+
   return (
     <>
       <SectionBar page="Compra Completada!" />
@@ -23,7 +36,7 @@ const SuccessScreen = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            width: { xs: "70%", md: "50%" },
+            width: { xs: "65%", md: "50%" },
             marginY: "3rem",
           }}
         >
@@ -55,9 +68,14 @@ const SuccessScreen = () => {
               textAlign: "center",
             }}
           >
-            Gracias por tu compra!.La misma está siendo procesada y será
-            completada entre a 3-6 horas. Recibirás una confirmación en tu email
-            cuando finalice el proceso.
+            La compra por el monto de
+            <Typography sx={{ color: "#FB2E86", display: "inline" }}>
+              {" "}
+              ${order.amount}{" "}
+            </Typography>
+            fue completada! .La misma está siendo procesada y será completada
+            entre a 3-6 horas. Recibirás una confirmación en tu email cuando
+            finalice el proceso.
           </Typography>
           <Link to={"/"}>
             <Button
@@ -72,6 +90,9 @@ const SuccessScreen = () => {
                   textDecoration: "none",
                   backgroundColor: "#FF1788",
                 },
+              }}
+              onClick={() => {
+                localStorage.setItem("uid", "");
               }}
             >
               Seguir comprando

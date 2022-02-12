@@ -1,20 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import SectionBar from "../../components/SectionBar";
 import TableCart from "../../components/TableCart";
-import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
-import StripeWrapper from "../../components/StripeWrapper";
+import GenerateForm from "../../components/GenerateForm";
 
 const CartScreen = () => {
   const cartProducts = useSelector((state) => state.products.cart);
-
-  let TotalPrice = cartProducts.reduce(function (prev, cur) {
-    return prev + cur.price * cur.count;
-  }, 0);
 
   return (
     <>
@@ -30,7 +22,7 @@ const CartScreen = () => {
       >
         <TableCart />
 
-        {cartProducts.length > 0 ? <StripeWrapper /> : null}
+        {cartProducts.length > 0 ? <GenerateForm /> : null}
       </Box>
     </>
   );

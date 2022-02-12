@@ -10,7 +10,6 @@ import { setEditCate } from "../../redux/reducers/categorieReducer";
 const CatContainer = () => {
   const dispatch = useDispatch();
   const callDispatch = (name) => {
-    console.log(name);
     dispatch(setEditCate(name));
   };
 

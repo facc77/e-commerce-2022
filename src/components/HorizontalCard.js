@@ -35,9 +35,7 @@ const HorizontalCard = ({ product }) => {
         });
   };
 
-  console.log(window.screen.width);
-
-  function fold(input, lineSize, lineArray) {
+  /* function fold(input, lineSize, lineArray) {
     lineArray = lineArray || [];
     if (input.length <= lineSize) {
       lineArray.push(input);
@@ -48,9 +46,9 @@ const HorizontalCard = ({ product }) => {
     return fold(tail, lineSize, lineArray);
   }
 
-  var arrayOfLines = fold(product.name, 15);
-  var foldedString = arrayOfLines.join("<br/>");
-
+   var arrayOfLines = fold(product.name, 15);
+     var foldedString = arrayOfLines.join("<br/>");
+    */
   return (
     <>
       <Box

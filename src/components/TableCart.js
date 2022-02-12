@@ -8,7 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,11 +22,10 @@ export default function BasicTable() {
   const dispatch = useDispatch();
 
   const cartProducts = useSelector((state) => state.products.cart);
-  console.log(cartProducts.length);
 
   return cartProducts.length > 0 ? (
     <TableContainer sx={{ border: 0, boxShadow: "none" }} component={Paper}>
-      <Table /* sx={{ minWidth: 150 }} */ aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontFamily: "Josefin Sans" }}>Producto</TableCell>
