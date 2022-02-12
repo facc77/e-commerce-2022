@@ -178,7 +178,7 @@ const FormPayment = () => {
               />
             </Grid>
           </Grid>
-          <Box mt={6.5} pt={6.5} />
+          <Box /* mt={6.5} */ pt={6.5} />
           <Button
             variant="contained"
             fullWidth
