@@ -238,10 +238,14 @@ const NavBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleBackoffice}>
-                  <AdminPanelSettingsIcon /> Backoffice
-                </MenuItem>
-                <Divider />
+                {user.role === "ADMIN_ROLE" ? (
+                  <>
+                    <MenuItem onClick={handleBackoffice}>
+                      <AdminPanelSettingsIcon /> Backoffice
+                    </MenuItem>
+                    <Divider />
+                  </>
+                ) : null}
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <Logout fontSize="small" />

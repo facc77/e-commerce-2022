@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,8 +10,12 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "../../styles/LoginForm.css";
-import { useDispatch } from "react-redux";
-import { startLogin } from "../../redux/reducers/authReducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  startLogin,
+  resetErrorMessage,
+} from "../../redux/reducers/authReducer";
+import { toast } from "react-toastify";
 
 const theme = createTheme({
   typography: {
@@ -40,6 +44,20 @@ const validationSchema = yup.object({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Email o contraseña incorrecta!", {
+        position: "bottom-left",
+      });
+    }
+    return () => {
+      if (error) {
+        dispatch(resetErrorMessage());
+      }
+    };
+  }, []);
 
   const formik = useFormik({
     initialValues: {
