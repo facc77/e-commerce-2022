@@ -130,7 +130,7 @@ export default function MediaCard({ product }) {
             left: '10px',
           }}
         >
-          {/* <ShoppingCartOutlinedIcon
+          <ShoppingCartOutlinedIcon
             className='cartIcon'
             sx={{
               color: '#151875',
@@ -138,24 +138,24 @@ export default function MediaCard({ product }) {
               padding: '5px',
               margin: '0.25rem',
               transition: '1s',
-               '&:hover': {
+              '&:hover': {
                 cursor: 'pointer',
                 backgroundColor: '#EBECF0',
                 borderRadius: '12px',
-              }, 
-              /* '&:active': {
+              },
+              '&:active': {
                 backgroundColor: '#949494',
                 borderRadius: '12px',
-              }, 
+              },
             }}
             onClick={() => callDispatch(product)}
-          /> */}
-          <button className='cartIcon'>
+          />
+          {/* <button className='cartIcon'>
             <i
               className='fa-solid fa-cart-arrow-down '
               onClick={() => callDispatch(product)}
             ></i>
-          </button>
+          </button> */}
           <FavoriteBorderOutlinedIcon
             sx={{
               color: '#151875',
