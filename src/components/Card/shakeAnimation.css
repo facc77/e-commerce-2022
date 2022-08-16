@@ -1,0 +1,36 @@
+.cartIcon {
+  color: #151875;
+  font-size: 22px;
+  padding: 5px;
+  margin: 0.25rem;
+
+  animation: shake 0.4s ease-in;
+}
+
+.cartIcon:active,
+.cartIcon.focus {
+  animation: shake 0.4s ease-in;
+  background-color: black;
+  transition: 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translate(0.8em);
+  }
+  10%,
+  30%,
+  50% {
+    transform: translate(-0.2em);
+  }
+  70%,
+  100% {
+    transform: translate(0);
+  }
+}
