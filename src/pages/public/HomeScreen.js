@@ -1,8 +1,9 @@
-import React from "react";
-import CarouselHome from "../../components/Carousel/CarouselHome";
-import CardContainer from "../../components/CardContainer";
-import ServicesContainer from "../../components/ServicesContainer";
-import CatContainer from "../../components/Categories/CatContainer";
+import React from 'react';
+import CarouselHome from '../../components/Carousel/CarouselHome';
+import CardContainer from '../../components/Card/CardContainer';
+import ServicesContainer from '../../components/ServicesContainer';
+import CatContainer from '../../components/Categories/CatContainer';
+import SocialBar from '../../components/socialBar/socialBar';
 
 const HomeScreen = () => {
   return (
@@ -11,6 +12,7 @@ const HomeScreen = () => {
       <CardContainer />
       <ServicesContainer />
       <CatContainer />
+      <SocialBar />
     </>
   );
 };
