@@ -18,6 +18,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 export default function MediaCard({ product }) {
+  const [iconShake, seticonShake] = React.useState(false);
   const { name, price, img, _id } = product;
   const dispatch = useDispatch();
   const { logged } = useSelector((state) => state.auth);
@@ -29,11 +30,17 @@ export default function MediaCard({ product }) {
   };
 
   const callDispatch = (product) => {
-    logged
-      ? verifyProduct(product)
-      : toast.error('Debes loguearte para comprar!', {
-          position: 'bottom-left',
-        });
+    if (logged) {
+      verifyProduct(product);
+    } else {
+      toast.error('Debes loguearte para comprar!', {
+        position: 'bottom-left',
+      });
+      seticonShake(true);
+      setTimeout(function () {
+        seticonShake(false);
+      }, 1000);
+    }
   };
 
   const addProductDispatch = (name) => {
@@ -131,7 +138,7 @@ export default function MediaCard({ product }) {
           }}
         >
           <ShoppingCartOutlinedIcon
-            className='cartIcon'
+            className={iconShake ? 'cartIcon' : ''}
             sx={{
               color: '#151875',
               fontSize: '22px',
@@ -150,12 +157,6 @@ export default function MediaCard({ product }) {
             }}
             onClick={() => callDispatch(product)}
           />
-          {/* <button className='cartIcon'>
-            <i
-              className='fa-solid fa-cart-arrow-down '
-              onClick={() => callDispatch(product)}
-            ></i>
-          </button> */}
           <FavoriteBorderOutlinedIcon
             sx={{
               color: '#151875',

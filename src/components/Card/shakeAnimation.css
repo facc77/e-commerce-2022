@@ -1,17 +1,27 @@
 .cartIcon {
-  color: #151875;
+  /*  color: #151875;
   font-size: 22px;
   padding: 5px;
-  margin: 0.25rem;
-
-  animation: shake 0.4s ease-in;
+  margin: 0.25rem; */
+  animation: horizontal-shaking 0.35s infinite;
 }
 
-.cartIcon:active,
-.cartIcon.focus {
-  animation: shake 0.4s ease-in;
-  background-color: black;
-  transition: 0.5s;
+@keyframes horizontal-shaking {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  50% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes shake {
